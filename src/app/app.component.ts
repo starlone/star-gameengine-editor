@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Bodies, Engine, Render, World, Runner } from 'matter-js';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { Factory, FreeMoveScript, KeyboardHandler, StarEngine } from 'star-gameengine';
 
 @Component({
   selector: 'app-root',
@@ -23,32 +24,30 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.demo();
+    this.inicialContent();
   }
 
-  demo() {
-    var runner = Runner.create();
-    var engine = Engine.create()
-    var render = Render.create({
-      element: document.getElementById('canvas') || undefined,
-      engine: engine,
-      options: {
-        width: 800,
-        height: 400,
-        wireframes: false,
-      },
-    })
-    var boxA = Bodies.rectangle(400, 200, 80, 80)
-    var ballA = Bodies.circle(380, 100, 40, {})
-    var ballB = Bodies.circle(460, 10, 40, {})
-    var ground = Bodies.rectangle(400, 380, 810, 60, {
-      isStatic: true,
-    })
-    World.add(engine.world, [boxA, ballA, ballB, ground])
-    Render.run(render)
+  inicialContent() {
+    const se = new StarEngine("canvas");
 
-    Runner.run(runner, engine);
-    console.log('oi');
+    var scene = se.getScene();
 
+    var terrain = Factory.rect({
+      'name': 'terrain', 'x': 500, 'y': 500, 'w': 800, 'h': 30
+    });
+    scene.add(terrain);
+
+    var player = Factory.rect({
+      'name': 'obj1', 'x': 300, 'y': 30, 'w': 30, 'h': 30, 'color': 'green'
+    });
+    scene.add(player);
+    var script = new FreeMoveScript(player, se.getJoystick(), 1);
+    player.addScript(script);
+
+    const handler = new KeyboardHandler(se.getJoystick());
+    console.log(handler);
+
+    se.start();
   }
+
 }
