@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
     var scene = se.getScene();
 
     var terrain = Factory.rect({
-      'name': 'terrain', 'x': 500, 'y': 500, 'w': 800, 'h': 30
+      'name': 'terrain', 'x': 500, 'y': 500, 'w': 800, 'h': 30, static: true
     });
     scene.add(terrain);
 
