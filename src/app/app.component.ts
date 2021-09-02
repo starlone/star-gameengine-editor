@@ -18,6 +18,8 @@ export class AppComponent implements OnInit {
       shareReplay()
     );
 
+  scene: any;
+
   constructor(private breakpointObserver: BreakpointObserver) {
 
   }
@@ -29,17 +31,22 @@ export class AppComponent implements OnInit {
   inicialContent() {
     const se = new StarEngine("canvas");
 
-    var scene = se.getScene();
+    this.scene = se.getScene();
 
     var terrain = Factory.rect({
       'name': 'terrain', 'x': 500, 'y': 500, 'w': 800, 'h': 30, static: true
     });
-    scene.add(terrain);
+    this.scene.add(terrain);
+
+    var ghost = Factory.rect({
+      'name': 'ghost', 'x': 500, 'y': 300, 'w': 800, 'h': 30, static: true, hasRigidBody: false
+    });
+    this.scene.add(ghost);
 
     var player = Factory.rect({
       'name': 'obj1', 'x': 300, 'y': 30, 'w': 30, 'h': 30, 'color': 'green'
     });
-    scene.add(player);
+    this.scene.add(player);
     var script = new PlataformPlayerScript(player, se.getJoystick(), 1);
     player.addScript(script);
 
