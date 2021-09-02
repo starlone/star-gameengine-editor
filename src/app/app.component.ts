@@ -1,9 +1,8 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
-import { Bodies, Engine, Render, World, Runner } from 'matter-js';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { Factory, FreeMoveScript, KeyboardHandler, StarEngine } from 'star-gameengine';
+import { Factory, KeyboardHandler, PlataformPlayerScript, StarEngine } from 'star-gameengine';
 
 @Component({
   selector: 'app-root',
@@ -41,7 +40,7 @@ export class AppComponent implements OnInit {
       'name': 'obj1', 'x': 300, 'y': 30, 'w': 30, 'h': 30, 'color': 'green'
     });
     scene.add(player);
-    var script = new FreeMoveScript(player, se.getJoystick(), 1);
+    var script = new PlataformPlayerScript(player, se.getJoystick(), 1);
     player.addScript(script);
 
     const handler = new KeyboardHandler(se.getJoystick());
