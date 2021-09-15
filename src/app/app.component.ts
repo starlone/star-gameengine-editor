@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { Factory, GameObject, KeyboardHandler, PlataformPlayerScript, StarEngine, Scene } from 'star-gameengine';
@@ -9,7 +9,7 @@ import { Factory, GameObject, KeyboardHandler, PlataformPlayerScript, StarEngine
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements AfterViewInit {
   title = 'star-gameengine-editor';
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -18,17 +18,18 @@ export class AppComponent implements OnInit {
       shareReplay()
     );
 
-  scene: any;
+  scene: Scene = new Scene();
   selected?: GameObject
   player?: GameObject;
   isPlaying = false;
-  engine?: StarEngine;
+  engineEdit?: StarEngine;
+  enginePlay?: StarEngine;
 
   constructor(private breakpointObserver: BreakpointObserver) {
 
   }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     this.inicialContent();
   }
 
@@ -37,44 +38,39 @@ export class AppComponent implements OnInit {
   }
 
   inicialContent() {
-    this.scene = new Scene();
-
-    this.engine = new StarEngine("canvas", this.scene);
-    const handler = new KeyboardHandler(this.engine.getJoystick());
+    this.engineEdit = new StarEngine("#canvasedit", this.scene);
+    const handler = new KeyboardHandler(this.engineEdit.getJoystick());
     console.log(handler);
 
-    this.engine.disable();
+    this.engineEdit.disable();
 
     var terrain = Factory.rect({
       'name': 'terrain', 'x': 500, 'y': 500, 'w': 800, 'h': 30, static: true
     });
     this.scene.add(terrain);
 
-    var ghost = Factory.rect({
-      'name': 'ghost', 'x': 500, 'y': 300, 'w': 800, 'h': 30, static: true, hasRigidBody: false
-    });
-    this.scene.add(ghost);
-
     this.player = Factory.rect({
       'name': 'obj1', 'x': 300, 'y': 30, 'w': 30, 'h': 30, 'color': 'green'
     });
     this.scene.add(this.player);
 
-    var script = new PlataformPlayerScript(this.player, this.engine.getJoystick(), 1);
+    var script = new PlataformPlayerScript(this.player, this.engineEdit.getJoystick(), 1);
     this.player.addScript(script);
 
-    this.engine.start();
+    this.engineEdit.start();
   }
 
   play() {
-    if (!this.engine)
+    if (!this.engineEdit)
       return;
     if (this.isPlaying) {
-      this.engine.disable();
+      this.engineEdit.disable();
     } else {
-      this.engine.enable();
+      const newscene = this.scene.clone();
+      this.enginePlay = new StarEngine("#canvasplay", newscene);
+      this.enginePlay.start();
     }
-    this.isPlaying = this.engine.isEnabled();
+    this.isPlaying = !this.isPlaying;
   }
 
 }
