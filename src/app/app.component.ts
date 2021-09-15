@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { Factory, GameObject, KeyboardHandler, PlataformPlayerScript, StarEngine } from 'star-gameengine';
+import { Factory, GameObject, KeyboardHandler, PlataformPlayerScript, StarEngine, Scene } from 'star-gameengine';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +20,9 @@ export class AppComponent implements OnInit {
 
   scene: any;
   selected?: GameObject
+  player?: GameObject;
+  isPlaying = false;
+  engine?: StarEngine;
 
   constructor(private breakpointObserver: BreakpointObserver) {
 
@@ -34,9 +37,13 @@ export class AppComponent implements OnInit {
   }
 
   inicialContent() {
-    const se = new StarEngine("canvas");
+    this.scene = new Scene();
 
-    this.scene = se.getScene();
+    this.engine = new StarEngine("canvas", this.scene);
+    const handler = new KeyboardHandler(this.engine.getJoystick());
+    console.log(handler);
+
+    this.engine.disable();
 
     var terrain = Factory.rect({
       'name': 'terrain', 'x': 500, 'y': 500, 'w': 800, 'h': 30, static: true
@@ -48,17 +55,26 @@ export class AppComponent implements OnInit {
     });
     this.scene.add(ghost);
 
-    var player = Factory.rect({
+    this.player = Factory.rect({
       'name': 'obj1', 'x': 300, 'y': 30, 'w': 30, 'h': 30, 'color': 'green'
     });
-    this.scene.add(player);
-    var script = new PlataformPlayerScript(player, se.getJoystick(), 1);
-    player.addScript(script);
+    this.scene.add(this.player);
 
-    const handler = new KeyboardHandler(se.getJoystick());
-    console.log(handler);
+    var script = new PlataformPlayerScript(this.player, this.engine.getJoystick(), 1);
+    this.player.addScript(script);
 
-    se.start();
+    this.engine.start();
+  }
+
+  play() {
+    if (!this.engine)
+      return;
+    if (this.isPlaying) {
+      this.engine.disable();
+    } else {
+      this.engine.enable();
+    }
+    this.isPlaying = this.engine.isEnabled();
   }
 
 }
