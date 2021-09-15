@@ -1,18 +1,35 @@
 <mat-toolbar color="primary">
-  <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()">
+  <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="sideleft.toggle()">
     <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
   </button>
   <span>star-gameengine-editor</span>
+  <span class="spacer"></span>
+  <span>
+    <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="sideright.toggle()">
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+  </span>
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer class="sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false">
+  <mat-sidenav #sideleft class="sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false" position="start">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a *ngFor="let item of scene.objs" mat-list-item href="#">{{item.name}}</a>
+      <a *ngFor="let item of scene.objs" mat-list-item href="#" (click)="select(item)" >{{item.name}}</a>
+      <a *ngFor="let item of scene.objs" mat-list-item href="#" (click)="select(item)" >{{item.name}}</a>
     </mat-nav-list>
   </mat-sidenav>
+
+  <mat-sidenav #sideright class="sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false" position="end">
+    <mat-toolbar>Properties</mat-toolbar>
+    <mat-form-field class="example-form-field" appearance="fill" *ngIf="selected">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" [(ngModel)]="selected.name">
+    </mat-form-field>
+  </mat-sidenav>
+
   <mat-sidenav-content>
 
     <div id="wrapper">

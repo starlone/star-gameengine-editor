@@ -2,7 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { Factory, KeyboardHandler, PlataformPlayerScript, StarEngine } from 'star-gameengine';
+import { Factory, GameObject, KeyboardHandler, PlataformPlayerScript, StarEngine } from 'star-gameengine';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
     );
 
   scene: any;
+  selected?: GameObject
 
   constructor(private breakpointObserver: BreakpointObserver) {
 
@@ -26,6 +27,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.inicialContent();
+  }
+
+  select(item: any) {
+    this.selected = item;
   }
 
   inicialContent() {
