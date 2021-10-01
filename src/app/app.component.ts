@@ -1,5 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { AfterViewInit, Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -9,8 +10,9 @@ import {
   KeyboardHandler,
   PlataformPlayerScript,
   Scene,
-  StarEngine,
+  StarEngine
 } from 'star-gameengine';
+import { DialogImportComponent } from './dialogs/dialog-import/dialog-import.component';
 
 @Component({
   selector: 'app-root',
@@ -34,7 +36,10 @@ export class AppComponent implements AfterViewInit {
   engineEdit?: StarEngine;
   enginePlay?: StarEngine;
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private dialog: MatDialog
+  ) {}
 
   ngAfterViewInit() {
     this.inicialContent();
@@ -97,5 +102,13 @@ export class AppComponent implements AfterViewInit {
     const json = JSON.stringify(this.scene);
     var blob = new Blob([json], { type: 'application/json;charset=utf-8' });
     saveAs(blob);
+  }
+
+  import() {
+    const dialogRef = this.dialog.open(DialogImportComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
   }
 }
