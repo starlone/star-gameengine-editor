@@ -107,8 +107,12 @@ export class AppComponent implements AfterViewInit {
   import() {
     const dialogRef = this.dialog.open(DialogImportComponent);
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        const newscene = new Scene(result);
+        this.engineEdit?.setScene(newscene);
+        this.scene = newscene;
+      }
     });
   }
 }
