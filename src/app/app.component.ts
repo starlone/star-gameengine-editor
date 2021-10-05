@@ -77,7 +77,6 @@ export class AppComponent implements AfterViewInit {
     this.scene.add(terrain);
 
     var script = new PlataformPlayerScript(
-      this.player,
       this.engineEdit.getJoystick(),
       1
     );
