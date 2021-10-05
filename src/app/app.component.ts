@@ -56,25 +56,25 @@ export class AppComponent implements AfterViewInit {
 
     this.engineEdit.disable();
 
-    var terrain = Factory.rect({
-      name: 'terrain',
-      x: 500,
-      y: 500,
-      w: 800,
-      h: 30,
-      static: true,
-    });
-    this.scene.add(terrain);
-
     this.player = Factory.rect({
       name: 'obj1',
-      x: 300,
-      y: 30,
+      x: 0,
+      y: 0,
       w: 30,
       h: 30,
       color: 'green',
     });
     this.scene.add(this.player);
+
+    var terrain = Factory.rect({
+      name: 'terrain',
+      x: 0,
+      y: 300,
+      w: 800,
+      h: 30,
+      static: true,
+    });
+    this.scene.add(terrain);
 
     var script = new PlataformPlayerScript(
       this.player,
@@ -84,6 +84,8 @@ export class AppComponent implements AfterViewInit {
     this.player.addScript(script);
 
     this.engineEdit.start();
+
+    this.scene.getCamera()?.position.change(0, 300);
   }
 
   play() {
