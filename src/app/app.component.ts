@@ -6,11 +6,12 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import {
   Factory,
+  FollowObjectScript,
   GameObject,
   KeyboardHandler,
   PlataformPlayerScript,
   Scene,
-  StarEngine
+  StarEngine,
 } from 'star-gameengine';
 import { DialogImportComponent } from './dialogs/dialog-import/dialog-import.component';
 
@@ -76,24 +77,24 @@ export class AppComponent implements AfterViewInit {
     });
     this.scene.add(terrain);
 
-    var script = new PlataformPlayerScript(
-      this.engineEdit.getJoystick(),
-      1
-    );
-    this.player.addScript(script);
+    this.player.addScript(new PlataformPlayerScript({ speed: 1 }));
 
     this.engineEdit.start();
 
     this.scene.getCamera()?.position.change(0, 300);
+    // this.scene.getCamera()?.addScript(new FollowObjectScript(this.player));
   }
 
   play() {
     if (!this.engineEdit) return;
     if (this.isPlaying) {
-      this.engineEdit.disable();
+      this.enginePlay?.disable();
+      this.enginePlay?.stop();
     } else {
       const newscene = this.scene.clone();
       this.enginePlay = new StarEngine('#canvasplay', newscene);
+      const handler2 = new KeyboardHandler(this.enginePlay.getJoystick());
+      console.log(handler2);
       this.enginePlay.start();
     }
     this.isPlaying = !this.isPlaying;
