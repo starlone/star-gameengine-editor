@@ -30,7 +30,7 @@
     [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false" position="start">
     <mat-toolbar>Menu</mat-toolbar>
     <mat-nav-list>
-      <a *ngFor="let item of scene.objs" mat-list-item href="#" (click)="select(item)">{{item.name}}</a>
+      <a *ngFor="let item of scene.objs" mat-list-item [ngClass]="{'selected': item == selected}" href="#" (click)="select(item)">{{item.name}}</a>
     </mat-nav-list>
   </mat-sidenav>
 
