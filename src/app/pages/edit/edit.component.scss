@@ -1,0 +1,45 @@
+.sidenav-container {
+  height: 90%;
+  background-color: #eee;
+}
+
+.sidenav {
+  width: 200px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.sidenav .mat-toolbar {
+  background: inherit;
+}
+
+.mat-toolbar.mat-primary {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+#wrapper {
+  width: 1024px;
+  height: 600px;
+  margin: 50px auto;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+mat-toolbar .title {
+  margin-right: 20px;}
+
+canvas {
+  border: 1px solid black;
+}
+
+@media only screen and (max-width: 1024px) {
+  #wrapper {
+      width: 100%;
+      height: 100%;
+  }
+}
+
+.selected, .selected:focus {
+  border: 1px solid black;
+  background-color: #ccc;
+}

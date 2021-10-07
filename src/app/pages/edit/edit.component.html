@@ -1,0 +1,55 @@
+<mat-toolbar color="primary">
+  <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="sideleft.toggle()">
+    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+  </button>
+  <div class="title">star-gameengine-editor</div>
+  <button type="button" mat-flat-button (click)="play()" *ngIf="!isPlaying">
+    Play
+    <mat-icon>play_arrow</mat-icon>
+  </button>
+  <button type="button" mat-flat-button color="warn" (click)="play()" *ngIf="isPlaying">
+    Stop
+    <mat-icon>stop</mat-icon>
+  </button>
+  <span class="spacer"></span>
+  <button mat-icon-button type="button" (click)="import()">
+    <mat-icon>upload</mat-icon>
+  </button>
+  <button mat-icon-button type="button" (click)="export()">
+    <mat-icon>download</mat-icon>
+  </button>
+  <span>
+    <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="sideright.toggle()">
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+  </span>
+</mat-toolbar>
+
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sideleft class="sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false" position="start">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <a *ngFor="let item of scene.objs" mat-list-item [ngClass]="{'selected': item == selected}" href="#" (click)="select(item)">{{item.name}}</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav #sideright class="sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false" position="end">
+    <mat-toolbar>Properties</mat-toolbar>
+    <mat-form-field class="example-form-field" appearance="fill" *ngIf="selected">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" [(ngModel)]="selected.name">
+    </mat-form-field>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+
+    <div id="wrapper">
+      <canvas id="canvasedit" width="800" height="600" [hidden]="isPlaying"></canvas>
+      <canvas id="canvasplay" width="800" height="600" [hidden]="!isPlaying"></canvas>
+    </div>
+
+    <!-- Add Content Here -->
+  </mat-sidenav-content>
+</mat-sidenav-container>
