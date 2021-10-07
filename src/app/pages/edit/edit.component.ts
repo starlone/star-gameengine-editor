@@ -1,6 +1,8 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { NestedTreeControl } from '@angular/cdk/tree';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { saveAs } from 'file-saver';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -28,6 +30,9 @@ export class EditComponent {
       map((result) => result.matches),
       shareReplay()
     );
+
+  treeControl = new NestedTreeControl<GameObject>((node) => node.children);
+  dataSource = new MatTreeNestedDataSource<GameObject>();
 
   scene: Scene = new Scene();
   selected?: GameObject;
@@ -66,6 +71,16 @@ export class EditComponent {
     });
     this.scene.add(this.player);
 
+    const teste = Factory.rect({
+      name: 'obj1',
+      x: 0,
+      y: 0,
+      w: 30,
+      h: 30,
+      color: 'green',
+    });
+    this.player.children.push(teste);
+
     var terrain = Factory.rect({
       name: 'terrain',
       x: 0,
@@ -81,8 +96,11 @@ export class EditComponent {
     this.engineEdit.start();
 
     this.scene.getCamera()?.position.change(0, 300);
-    // this.scene.getCamera()?.addScript(new FollowObjectScript(this.player));
+
+    this.dataSource.data = this.scene.objs;
   }
+
+  hasChild = (_: number, node: GameObject) => !!node.children && node.children.length > 0;
 
   play() {
     if (!this.engineEdit) return;

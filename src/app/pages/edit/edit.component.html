@@ -1,5 +1,10 @@
 <mat-toolbar color="primary">
-  <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="sideleft.toggle()">
+  <button
+    type="button"
+    aria-label="Toggle sidenav"
+    mat-icon-button
+    (click)="sideleft.toggle()"
+  >
     <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
   </button>
   <div class="title">star-gameengine-editor</div>
@@ -7,7 +12,13 @@
     Play
     <mat-icon>play_arrow</mat-icon>
   </button>
-  <button type="button" mat-flat-button color="warn" (click)="play()" *ngIf="isPlaying">
+  <button
+    type="button"
+    mat-flat-button
+    color="warn"
+    (click)="play()"
+    *ngIf="isPlaying"
+  >
     Stop
     <mat-icon>stop</mat-icon>
   </button>
@@ -19,35 +30,105 @@
     <mat-icon>download</mat-icon>
   </button>
   <span>
-    <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="sideright.toggle()">
+    <button
+      type="button"
+      aria-label="Toggle sidenav"
+      mat-icon-button
+      (click)="sideright.toggle()"
+    >
       <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
     </button>
   </span>
 </mat-toolbar>
 
 <mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sideleft class="sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false" position="start">
+  <mat-sidenav
+    #sideleft
+    class="sidenav"
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+    position="start"
+  >
     <mat-toolbar>Menu</mat-toolbar>
-    <mat-nav-list>
-      <a *ngFor="let item of scene.objs" mat-list-item [ngClass]="{'selected': item == selected}" href="#" (click)="select(item)">{{item.name}}</a>
-    </mat-nav-list>
+    <mat-tree
+      [dataSource]="dataSource"
+      [treeControl]="treeControl"
+      class="example-tree"
+    >
+      <mat-tree-node
+        *matTreeNodeDef="let node"
+        matTreeNodeToggle
+        (click)="select(node)"
+        [ngClass]="{ selected: node == selected }"
+      >
+        {{ node.name }}
+      </mat-tree-node>
+      <!-- This is the tree node template for expandable nodes -->
+      <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <div
+          class="mat-tree-node"
+          (click)="select(node)"
+          [ngClass]="{ selected: node == selected }"
+        >
+          <button
+            mat-icon-button
+            matTreeNodeToggle
+            [attr.aria-label]="'Toggle ' + node.name"
+          >
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{
+                treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
+              }}
+            </mat-icon>
+          </button>
+          {{ node.name }}
+        </div>
+        <!-- There is inline padding applied to this div using styles.
+              This padding value depends on the mat-icon-button width.  -->
+        <div
+          [class.example-tree-invisible]="!treeControl.isExpanded(node)"
+          role="group"
+        >
+          <ng-container matTreeNodeOutlet></ng-container>
+        </div>
+      </mat-nested-tree-node>
+    </mat-tree>
   </mat-sidenav>
 
-  <mat-sidenav #sideright class="sidenav" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false" position="end">
+  <mat-sidenav
+    #sideright
+    class="sidenav"
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+    position="end"
+  >
     <mat-toolbar>Properties</mat-toolbar>
-    <mat-form-field class="example-form-field" appearance="fill" *ngIf="selected">
+    <mat-form-field
+      class="example-form-field"
+      appearance="fill"
+      *ngIf="selected"
+    >
       <mat-label>Name</mat-label>
-      <input matInput type="text" [(ngModel)]="selected.name">
+      <input matInput type="text" [(ngModel)]="selected.name" />
     </mat-form-field>
   </mat-sidenav>
 
   <mat-sidenav-content>
-
     <div id="wrapper">
-      <canvas id="canvasedit" width="800" height="600" [hidden]="isPlaying"></canvas>
-      <canvas id="canvasplay" width="800" height="600" [hidden]="!isPlaying"></canvas>
+      <canvas
+        id="canvasedit"
+        width="800"
+        height="600"
+        [hidden]="isPlaying"
+      ></canvas>
+      <canvas
+        id="canvasplay"
+        width="800"
+        height="600"
+        [hidden]="!isPlaying"
+      ></canvas>
     </div>
 
     <!-- Add Content Here -->
