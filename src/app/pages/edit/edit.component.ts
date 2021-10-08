@@ -1,8 +1,6 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { NestedTreeControl } from '@angular/cdk/tree';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { saveAs } from 'file-saver';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
@@ -13,7 +11,7 @@ import {
   KeyboardHandler,
   PlataformPlayerScript,
   Scene,
-  StarEngine,
+  StarEngine
 } from 'star-gameengine';
 
 @Component({
@@ -31,15 +29,13 @@ export class EditComponent {
       shareReplay()
     );
 
-  treeControl = new NestedTreeControl<GameObject>((node) => node.children);
-  dataSource = new MatTreeNestedDataSource<GameObject>();
-
   scene: Scene = new Scene();
   selected?: GameObject;
   player?: GameObject;
   isPlaying = false;
   engineEdit?: StarEngine;
   enginePlay?: StarEngine;
+  objs: GameObject[] = [];
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -96,11 +92,8 @@ export class EditComponent {
     this.engineEdit.start();
 
     this.scene.getCamera()?.position.change(0, 300);
-
-    this.dataSource.data = this.scene.objs;
+    this.objs= this.scene.objs;
   }
-
-  hasChild = (_: number, node: GameObject) => !!node.children && node.children.length > 0;
 
   play() {
     if (!this.engineEdit) return;
