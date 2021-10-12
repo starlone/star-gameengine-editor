@@ -15,6 +15,7 @@ import { AppComponent } from './app.component';
 import { DialogImportComponent } from './dialogs/dialog-import/dialog-import.component';
 import { EditComponent } from './pages/edit/edit.component';
 import { PanelObjectsTreeComponent } from './panels/panel-objects-tree/panel-objects-tree.component';
+import { PanelPropertiesComponent } from './panels/panel-properties/panel-properties.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { PanelObjectsTreeComponent } from './panels/panel-objects-tree/panel-obj
     DialogImportComponent,
     EditComponent,
     PanelObjectsTreeComponent,
+    PanelPropertiesComponent,
   ],
   imports: [
     BrowserModule,

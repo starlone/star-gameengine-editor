@@ -67,16 +67,6 @@ export class EditComponent {
     });
     this.scene.add(this.player);
 
-    const teste = Factory.rect({
-      name: 'obj1',
-      x: 0,
-      y: 0,
-      w: 30,
-      h: 30,
-      color: 'green',
-    });
-    this.player.children.push(teste);
-
     var terrain = Factory.rect({
       name: 'terrain',
       x: 0,

@@ -66,15 +66,10 @@
     [opened]="(isHandset$ | async) === false"
     position="end"
   >
-    <mat-toolbar>Properties</mat-toolbar>
-    <mat-form-field
-      class="example-form-field"
-      appearance="fill"
+    <app-panel-properties
       *ngIf="selected"
-    >
-      <mat-label>Name</mat-label>
-      <input matInput type="text" [(ngModel)]="selected.name" />
-    </mat-form-field>
+      [selected]="selected"
+    ></app-panel-properties>
   </mat-sidenav>
 
   <mat-sidenav-content>
