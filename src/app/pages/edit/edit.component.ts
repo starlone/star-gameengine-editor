@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
 import { Observable } from 'rxjs';
@@ -19,7 +19,7 @@ import {
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss'],
 })
-export class EditComponent {
+export class EditComponent implements OnInit {
   title = 'star-gameengine-editor';
 
   isHandset$: Observable<boolean> = this.breakpointObserver
@@ -35,14 +35,13 @@ export class EditComponent {
   isPlaying = false;
   engineEdit?: StarEngine;
   enginePlay?: StarEngine;
-  objs: GameObject[] = [];
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog
   ) {}
 
-  ngAfterViewInit() {
+  ngOnInit(): void {
     this.inicialContent();
   }
 
@@ -82,7 +81,6 @@ export class EditComponent {
     this.engineEdit.start();
 
     this.scene.getCamera()?.position.change(0, 300);
-    this.objs= this.scene.objs;
   }
 
   play() {

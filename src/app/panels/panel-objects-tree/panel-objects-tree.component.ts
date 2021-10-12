@@ -25,16 +25,12 @@ export class PanelObjectsTreeComponent implements AfterViewInit, OnChanges {
   treeControl = new NestedTreeControl<GameObject>((node) => node.children);
   dataSource = new MatTreeNestedDataSource<GameObject>();
 
-  constructor() {}
-
   ngAfterViewInit(): void {
-    console.log(this.objs.length);
     this.dataSource.data = this.objs;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSource.data = this.objs;
-    console.log(this.objs.length);
   }
 
   select(node: GameObject) {
