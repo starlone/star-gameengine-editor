@@ -14,7 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DialogImportComponent } from './dialogs/dialog-import/dialog-import.component';
 import { EditComponent } from './pages/edit/edit.component';
-import { PanelObjectsTreeComponent } from './panel-objects-tree/panel-objects-tree.component';
+import { PanelObjectsTreeComponent } from './panels/panel-objects-tree/panel-objects-tree.component';
 
 @NgModule({
   declarations: [
