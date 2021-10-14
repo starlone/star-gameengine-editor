@@ -8,12 +8,12 @@
   >
 </app-toolbar>
 
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container class="sidenav-container" [hasBackdrop]="false">
   <mat-sidenav
     #sideleft
     class="sidenav"
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [mode]="'over'"
     [opened]="(isHandset$ | async) === false"
     position="start"
   >
@@ -29,7 +29,7 @@
     #sideright
     class="sidenav"
     [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [mode]="'over'"
     [opened]="(isHandset$ | async) === false"
     position="end"
   >
