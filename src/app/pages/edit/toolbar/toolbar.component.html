@@ -1,0 +1,47 @@
+<mat-toolbar color="primary">
+  <button
+    type="button"
+    aria-label="Toggle sidenav"
+    mat-icon-button
+    (click)="onSideLeft.emit()"
+  >
+    <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+  </button>
+  <div class="title" [hidden]="(isHandset$ | async)">Star GameEngine Editor</div>
+  <button
+    type="button"
+    mat-flat-button
+    (click)="onPlay.emit()"
+    *ngIf="!isPlaying"
+  >
+    Play
+    <mat-icon>play_arrow</mat-icon>
+  </button>
+  <button
+    type="button"
+    mat-flat-button
+    color="warn"
+    (click)="onPlay.emit()"
+    *ngIf="isPlaying"
+  >
+    Stop
+    <mat-icon>stop</mat-icon>
+  </button>
+  <span class="spacer"></span>
+  <button mat-icon-button type="button" (click)="import()">
+    <mat-icon>upload</mat-icon>
+  </button>
+  <button mat-icon-button type="button" (click)="export()">
+    <mat-icon>download</mat-icon>
+  </button>
+  <span>
+    <button
+      type="button"
+      aria-label="Toggle sidenav"
+      mat-icon-button
+      (click)="onSideRight.emit()"
+    >
+      <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+    </button>
+  </span>
+</mat-toolbar>

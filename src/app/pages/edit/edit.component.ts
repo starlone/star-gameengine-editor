@@ -1,10 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { saveAs } from 'file-saver';
+import { AfterViewInit, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { DialogImportComponent } from 'src/app/pages/edit/dialog-import/dialog-import.component';
 import {
   Factory,
   GameObject,
@@ -36,10 +33,7 @@ export class EditComponent implements AfterViewInit {
   engineEdit?: StarEngine;
   enginePlay?: StarEngine;
 
-  constructor(
-    private breakpointObserver: BreakpointObserver,
-    private dialog: MatDialog
-  ) {
+  constructor(private breakpointObserver: BreakpointObserver) {
     this.inicialContent();
   }
 
@@ -96,23 +90,5 @@ export class EditComponent implements AfterViewInit {
       this.enginePlay.start();
     }
     this.isPlaying = !this.isPlaying;
-  }
-
-  export() {
-    const json = JSON.stringify(this.scene);
-    var blob = new Blob([json], { type: 'application/json;charset=utf-8' });
-    saveAs(blob);
-  }
-
-  import() {
-    const dialogRef = this.dialog.open(DialogImportComponent);
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        const newscene = new Scene(result);
-        this.engineEdit?.setScene(newscene);
-        this.scene = newscene;
-      }
-    });
   }
 }

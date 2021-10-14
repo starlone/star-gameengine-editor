@@ -16,6 +16,7 @@ import { DialogImportComponent } from './pages/edit/dialog-import/dialog-import.
 import { EditComponent } from './pages/edit/edit.component';
 import { PanelObjectsTreeComponent } from './pages/edit/panels/panel-objects-tree/panel-objects-tree.component';
 import { PanelPropertiesComponent } from './pages/edit/panels/panel-properties/panel-properties.component';
+import { ToolbarComponent } from './pages/edit/toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { PanelPropertiesComponent } from './pages/edit/panels/panel-properties/p
     EditComponent,
     PanelObjectsTreeComponent,
     PanelPropertiesComponent,
+    ToolbarComponent,
   ],
   imports: [
     BrowserModule,
