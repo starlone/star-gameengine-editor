@@ -12,10 +12,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { DialogImportComponent } from './dialogs/dialog-import/dialog-import.component';
+import { DialogImportComponent } from './pages/edit/dialog-import/dialog-import.component';
 import { EditComponent } from './pages/edit/edit.component';
-import { PanelObjectsTreeComponent } from './panels/panel-objects-tree/panel-objects-tree.component';
-import { PanelPropertiesComponent } from './panels/panel-properties/panel-properties.component';
+import { PanelObjectsTreeComponent } from './pages/edit/panels/panel-objects-tree/panel-objects-tree.component';
+import { PanelPropertiesComponent } from './pages/edit/panels/panel-properties/panel-properties.component';
 
 @NgModule({
   declarations: [

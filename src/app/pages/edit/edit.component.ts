@@ -1,17 +1,17 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
-import { DialogImportComponent } from 'src/app/dialogs/dialog-import/dialog-import.component';
+import { DialogImportComponent } from 'src/app/pages/edit/dialog-import/dialog-import.component';
 import {
   Factory,
   GameObject,
   KeyboardHandler,
   PlataformPlayerScript,
   Scene,
-  StarEngine
+  StarEngine,
 } from 'star-gameengine';
 
 @Component({
@@ -19,7 +19,7 @@ import {
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.scss'],
 })
-export class EditComponent implements OnInit {
+export class EditComponent implements AfterViewInit {
   title = 'star-gameengine-editor';
 
   isHandset$: Observable<boolean> = this.breakpointObserver
@@ -39,10 +39,12 @@ export class EditComponent implements OnInit {
   constructor(
     private breakpointObserver: BreakpointObserver,
     private dialog: MatDialog
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.inicialContent();
+  }
+
+  ngAfterViewInit(): void {
+    this.engineEdit?.start();
   }
 
   select(item: any) {
@@ -77,8 +79,6 @@ export class EditComponent implements OnInit {
     this.scene.add(terrain);
 
     this.player.addScript(new PlataformPlayerScript({ speed: 1 }));
-
-    this.engineEdit.start();
 
     this.scene.getCamera()?.position.change(0, 300);
   }
