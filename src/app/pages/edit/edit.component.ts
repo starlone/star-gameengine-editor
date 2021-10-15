@@ -74,7 +74,7 @@ export class EditComponent implements AfterViewInit {
 
     this.player.addScript(new PlataformPlayerScript({ speed: 1 }));
 
-    this.scene.getCamera()?.position.change(0, 300);
+    this.scene.getCamera()?.position.change(0, 600);
   }
 
   play() {
