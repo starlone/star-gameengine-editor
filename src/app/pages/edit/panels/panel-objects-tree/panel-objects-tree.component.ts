@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import {
   AfterViewInit,
@@ -6,7 +7,7 @@ import {
   Input,
   OnChanges,
   Output,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { GameObject } from 'star-gameengine';
@@ -33,10 +34,18 @@ export class PanelObjectsTreeComponent implements AfterViewInit, OnChanges {
     this.dataSource.data = this.objs;
   }
 
-  select(node: GameObject) {
+  select(node: GameObject | undefined) {
     this.onSelect.emit(node);
   }
 
   hasChild = (_: number, node: GameObject) =>
     !!node.children && node.children.length > 0;
+
+  drop(event: CdkDragDrop<GameObject[]>) {
+    moveItemInArray(this.objs, event.previousIndex, event.currentIndex);
+    this.select(undefined);
+    setTimeout(()=>{
+      this.select(this.objs[event.currentIndex]);
+    }, 100);
+  }
 }

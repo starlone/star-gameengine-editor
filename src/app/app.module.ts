@@ -1,3 +1,4 @@
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { LayoutModule } from '@angular/cdk/layout';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -40,6 +41,7 @@ import { ToolbarComponent } from './pages/edit/toolbar/toolbar.component';
     FormsModule,
     MatDialogModule,
     MatTreeModule,
+    DragDropModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

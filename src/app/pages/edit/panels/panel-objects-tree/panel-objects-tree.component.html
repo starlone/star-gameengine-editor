@@ -2,13 +2,18 @@
   [dataSource]="dataSource"
   [treeControl]="treeControl"
   class="example-tree"
+  cdkDropList
+  (cdkDropListDropped)="drop($event)"
 >
   <mat-tree-node
     *matTreeNodeDef="let node"
     matTreeNodeToggle
     (click)="select(node)"
     [ngClass]="{ selected: node == selected }"
+    cdkDrag
+    class="example-box"
   >
+    <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
     {{ node.name }}
   </mat-tree-node>
   <!-- This is the tree node template for expandable nodes -->
