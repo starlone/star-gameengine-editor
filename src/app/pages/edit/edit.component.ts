@@ -64,7 +64,7 @@ export class EditComponent implements AfterViewInit {
     var terrain = Factory.rect({
       name: 'terrain',
       x: 0,
-      y: 300,
+      y: 200,
       w: 800,
       h: 30,
       static: true,
@@ -72,8 +72,6 @@ export class EditComponent implements AfterViewInit {
     this.scene.add(terrain);
 
     this.player.addScript(new PlataformPlayerScript({ speed: 1 }));
-
-    this.scene.getCamera()?.position.change(0, 600);
   }
 
   play() {
