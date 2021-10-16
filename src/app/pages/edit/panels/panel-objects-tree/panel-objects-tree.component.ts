@@ -7,7 +7,7 @@ import {
   Input,
   OnChanges,
   Output,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { GameObject } from 'star-gameengine';
@@ -44,7 +44,7 @@ export class PanelObjectsTreeComponent implements AfterViewInit, OnChanges {
   drop(event: CdkDragDrop<GameObject[]>) {
     moveItemInArray(this.objs, event.previousIndex, event.currentIndex);
     this.select(undefined);
-    setTimeout(()=>{
+    setTimeout(() => {
       this.select(this.objs[event.currentIndex]);
     }, 100);
   }

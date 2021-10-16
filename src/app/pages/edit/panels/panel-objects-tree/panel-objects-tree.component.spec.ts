@@ -8,9 +8,8 @@ describe('PanelObjectsTreeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PanelObjectsTreeComponent ]
-    })
-    .compileComponents();
+      declarations: [PanelObjectsTreeComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {
