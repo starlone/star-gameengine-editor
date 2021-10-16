@@ -47,8 +47,7 @@ export class EditComponent implements AfterViewInit {
 
   inicialContent() {
     this.engineEdit = new StarEngine('#canvasedit', this.scene);
-    const handler = new KeyboardHandler(this.engineEdit.getJoystick());
-    console.log(handler);
+    KeyboardHandler.add(this.engineEdit.getJoystick());
 
     this.engineEdit.disable();
 
@@ -85,8 +84,7 @@ export class EditComponent implements AfterViewInit {
     } else {
       const newscene = this.scene.clone();
       this.enginePlay = new StarEngine('#canvasplay', newscene);
-      const handler2 = new KeyboardHandler(this.enginePlay.getJoystick());
-      console.log(handler2);
+      KeyboardHandler.add(this.enginePlay.getJoystick());
       this.enginePlay.start();
     }
     this.isPlaying = !this.isPlaying;
