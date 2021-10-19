@@ -9,6 +9,7 @@ import {
   PlataformPlayerScript,
   Scene,
   StarEngine,
+  ZoomInteraction,
 } from 'star-gameengine';
 
 @Component({
@@ -72,6 +73,8 @@ export class EditComponent implements AfterViewInit {
     this.scene.add(terrain);
 
     this.player.addScript(new PlataformPlayerScript({ speed: 1 }));
+
+    this.engineEdit?.getViewport()?.addInteraction(new ZoomInteraction());
   }
 
   play() {
