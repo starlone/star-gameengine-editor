@@ -6,6 +6,7 @@ import {
   Factory,
   GameObject,
   KeyboardHandler,
+  PanInteraction,
   PlataformPlayerScript,
   Scene,
   StarEngine,
@@ -75,6 +76,9 @@ export class EditComponent implements AfterViewInit {
     this.player.addScript(new PlataformPlayerScript({ speed: 1 }));
 
     this.engineEdit?.getViewport()?.addInteraction(new ZoomInteraction());
+    this.engineEdit
+      ?.getViewport()
+      ?.addInteraction(new PanInteraction(this.scene.getCamera()));
   }
 
   play() {
