@@ -14,3 +14,21 @@ body {
 .spacer {
   flex: 1 1 auto;
 }
+
+.panel-card.mat-card {
+  padding: 0px;
+}
+
+.panel-card {
+  .mat-card-title {
+    padding: 16px;
+  }
+
+  .mat-card-title {
+    background-color: #ccc;
+  }
+
+  .mat-card-content {
+    margin: 5px;
+  }
+}

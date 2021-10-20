@@ -1,46 +1,53 @@
-<mat-tree
-  [dataSource]="dataSource"
-  [treeControl]="treeControl"
-  class="example-tree"
-  cdkDropList
-  (cdkDropListDropped)="drop($event)"
->
-  <mat-tree-node
-    *matTreeNodeDef="let node"
-    matTreeNodeToggle
-    (click)="select(node)"
-    [ngClass]="{ selected: node == selected }"
-    cdkDrag
-    class="example-box"
-  >
-    <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
-    {{ node.name }}
-  </mat-tree-node>
-  <!-- This is the tree node template for expandable nodes -->
-  <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
-    <div
-      class="mat-tree-node"
-      (click)="select(node)"
-      [ngClass]="{ selected: node == selected }"
+<mat-card class="panel-card">
+  <mat-card-title>Game Objects</mat-card-title>
+  <mat-card-content>
+    <mat-tree
+      [dataSource]="dataSource"
+      [treeControl]="treeControl"
+      class="example-tree"
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
     >
-      <button
-        mat-icon-button
+      <mat-tree-node
+        *matTreeNodeDef="let node"
         matTreeNodeToggle
-        [attr.aria-label]="'Toggle ' + node.name"
+        (click)="select(node)"
+        [ngClass]="{ selected: node == selected }"
+        cdkDrag
+        class="example-box"
       >
-        <mat-icon class="mat-icon-rtl-mirror">
-          {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
-        </mat-icon>
-      </button>
-      {{ node.name }}
-    </div>
-    <!-- There is inline padding applied to this div using styles.
+        <div class="example-custom-placeholder" *cdkDragPlaceholder></div>
+        {{ node.name }}
+      </mat-tree-node>
+      <!-- This is the tree node template for expandable nodes -->
+      <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+        <div
+          class="mat-tree-node"
+          (click)="select(node)"
+          [ngClass]="{ selected: node == selected }"
+        >
+          <button
+            mat-icon-button
+            matTreeNodeToggle
+            [attr.aria-label]="'Toggle ' + node.name"
+          >
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{
+                treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
+              }}
+            </mat-icon>
+          </button>
+          {{ node.name }}
+        </div>
+        <!-- There is inline padding applied to this div using styles.
               This padding value depends on the mat-icon-button width.  -->
-    <div
-      [class.example-tree-invisible]="!treeControl.isExpanded(node)"
-      role="group"
-    >
-      <ng-container matTreeNodeOutlet></ng-container>
-    </div>
-  </mat-nested-tree-node>
-</mat-tree>
+        <div
+          [class.example-tree-invisible]="!treeControl.isExpanded(node)"
+          role="group"
+        >
+          <ng-container matTreeNodeOutlet></ng-container>
+        </div>
+      </mat-nested-tree-node>
+    </mat-tree>
+  </mat-card-content>
+</mat-card>

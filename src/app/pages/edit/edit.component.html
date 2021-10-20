@@ -17,12 +17,12 @@
     [opened]="(isHandset$ | async) === false"
     position="start"
   >
-    <mat-toolbar>Game Objects</mat-toolbar>
     <app-panel-objects-tree
       [objs]="scene.objs"
       [selected]="selected"
       (onSelect)="select($event)"
-    ></app-panel-objects-tree>
+    >
+    </app-panel-objects-tree>
   </mat-sidenav>
 
   <mat-sidenav
@@ -33,10 +33,7 @@
     [opened]="(isHandset$ | async) === false"
     position="end"
   >
-    <app-panel-properties
-      *ngIf="selected"
-      [selected]="selected"
-    ></app-panel-properties>
+    <app-panel-properties [selected]="selected"></app-panel-properties>
   </mat-sidenav>
 
   <mat-sidenav-content>

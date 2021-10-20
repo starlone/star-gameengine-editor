@@ -1,16 +1,32 @@
-<div *ngIf="selected">
-  <mat-toolbar>Properties</mat-toolbar>
-  <mat-form-field class="example-form-field" appearance="fill">
-    <mat-label>Name</mat-label>
-    <input matInput type="text" [(ngModel)]="selected.name" />
-  </mat-form-field>
-  <h3>Position</h3>
-  <mat-form-field class="example-form-field" appearance="fill">
-    <mat-label>X</mat-label>
-    <input matInput type="number" [(ngModel)]="selected.position.x" name="position-x" />
-  </mat-form-field>
-  <mat-form-field class="example-form-field" appearance="fill">
-    <mat-label>Y</mat-label>
-    <input matInput type="number" [(ngModel)]="selected.position.y" name="position-y" />
-  </mat-form-field>
-</div>
+<mat-card class="panel-card">
+  <mat-card-title>Properties</mat-card-title>
+  <mat-card-content *ngIf="selected">
+    <mat-form-field class="example-form-field" appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput type="text" [(ngModel)]="selected.name" />
+    </mat-form-field>
+    <h3>Position</h3>
+    <mat-form-field class="example-form-field" appearance="fill">
+      <mat-label>X</mat-label>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="selected.position.x"
+        name="position-x"
+      />
+    </mat-form-field>
+    <mat-form-field class="example-form-field" appearance="fill">
+      <mat-label>Y</mat-label>
+      <input
+        matInput
+        type="number"
+        [(ngModel)]="selected.position.y"
+        name="position-y"
+      />
+    </mat-form-field>
+    <mat-form-field class="example-form-field" appearance="fill">
+      <mat-label>Angle</mat-label>
+      <input matInput type="number" [(ngModel)]="selected.angle" name="angle" />
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>
