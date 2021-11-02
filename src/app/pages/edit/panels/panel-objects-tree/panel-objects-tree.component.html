@@ -1,6 +1,10 @@
 <mat-card class="panel-card">
   <mat-card-title>Game Objects</mat-card-title>
   <mat-card-content>
+    <button type="button" mat-raised-button (click)="newObject()">
+      <mat-icon>add</mat-icon>
+      Add
+    </button>
     <mat-tree
       [dataSource]="dataSource"
       [treeControl]="treeControl"

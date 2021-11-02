@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DialogImportComponent } from './pages/edit/dialogs/dialog-import/dialog-import.component';
+import { DialogNewrectComponent } from './pages/edit/dialogs/dialog-newrect/dialog-newrect.component';
 import { EditComponent } from './pages/edit/edit.component';
 import { PanelObjectsTreeComponent } from './pages/edit/panels/panel-objects-tree/panel-objects-tree.component';
 import { PanelPropertiesComponent } from './pages/edit/panels/panel-properties/panel-properties.component';
@@ -24,6 +25,7 @@ import { ToolbarComponent } from './pages/edit/toolbar/toolbar.component';
   declarations: [
     AppComponent,
     DialogImportComponent,
+    DialogNewrectComponent,
     EditComponent,
     PanelObjectsTreeComponent,
     PanelPropertiesComponent,

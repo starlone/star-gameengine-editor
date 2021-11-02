@@ -9,8 +9,10 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
 import { GameObject } from 'star-gameengine';
+import { DialogNewrectComponent } from '../../dialogs/dialog-newrect/dialog-newrect.component';
 
 @Component({
   selector: 'app-panel-objects-tree',
@@ -25,6 +27,8 @@ export class PanelObjectsTreeComponent implements AfterViewInit, OnChanges {
 
   treeControl = new NestedTreeControl<GameObject>((node) => node.children);
   dataSource = new MatTreeNestedDataSource<GameObject>();
+
+  constructor(private dialog: MatDialog) {}
 
   ngAfterViewInit(): void {
     this.dataSource.data = this.objs;
@@ -47,5 +51,18 @@ export class PanelObjectsTreeComponent implements AfterViewInit, OnChanges {
     setTimeout(() => {
       this.select(this.objs[event.currentIndex]);
     }, 100);
+  }
+
+  newObject() {
+    const dialogRef = this.dialog.open(DialogNewrectComponent);
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.objs.push(result);
+        setTimeout(() => {
+          this.select(result);
+        }, 100);
+      }
+    });
   }
 }

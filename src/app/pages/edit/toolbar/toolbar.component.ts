@@ -50,8 +50,4 @@ export class ToolbarComponent {
       }
     });
   }
-
-  newObject() {
-    alert('oi');
-  }
 }
