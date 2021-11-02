@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { Scene, StarEngine } from 'star-gameengine';
-import { DialogImportComponent } from '../dialog-import/dialog-import.component';
+import { DialogImportComponent } from '../dialogs/dialog-import/dialog-import.component';
 
 @Component({
   selector: 'app-toolbar',
@@ -49,5 +49,9 @@ export class ToolbarComponent {
         this.scene = newscene;
       }
     });
+  }
+
+  newObject() {
+    alert('oi');
   }
 }
