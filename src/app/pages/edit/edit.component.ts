@@ -7,6 +7,7 @@ import {
   GameObject,
   KeyboardHandler,
   PanInteraction,
+  SelectObjectInteraction,
   PlataformPlayerScript,
   Scene,
   StarEngine,
@@ -79,6 +80,11 @@ export class EditComponent implements AfterViewInit {
     this.engineEdit
       ?.getViewport()
       ?.addInteraction(new PanInteraction(this.scene.getCamera()));
+    this.engineEdit?.getViewport()?.addInteraction(
+      new SelectObjectInteraction(this.scene, (obj: any) => {
+        this.select(obj);
+      })
+    );
   }
 
   play() {
