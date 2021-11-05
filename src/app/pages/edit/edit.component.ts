@@ -11,7 +11,7 @@ import {
   Scene,
   SelectObjectInteraction,
   StarEngine,
-  ZoomInteraction,
+  ZoomInteraction
 } from 'star-gameengine';
 
 @Component({
@@ -80,7 +80,8 @@ export class EditComponent implements AfterViewInit {
 
     viewport.addInteraction(new ZoomInteraction());
     viewport.addInteraction(
-      new SelectObjectInteraction(this.scene, (obj: any) => {
+      new SelectObjectInteraction((coordinate: any) => {
+        const obj = this.scene.getObjectByCoordinate(coordinate);
         this.select(obj);
       })
     );
