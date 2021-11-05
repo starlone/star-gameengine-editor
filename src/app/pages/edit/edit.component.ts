@@ -7,9 +7,9 @@ import {
   GameObject,
   KeyboardHandler,
   PanInteraction,
-  SelectObjectInteraction,
   PlataformPlayerScript,
   Scene,
+  SelectObjectInteraction,
   StarEngine,
   ZoomInteraction,
 } from 'star-gameengine';
@@ -33,10 +33,11 @@ export class EditComponent implements AfterViewInit {
   selected?: GameObject;
   player?: GameObject;
   isPlaying = false;
-  engineEdit?: StarEngine;
+  engineEdit: StarEngine;
   enginePlay?: StarEngine;
 
   constructor(private breakpointObserver: BreakpointObserver) {
+    this.engineEdit = new StarEngine('#canvasedit', this.scene);
     this.inicialContent();
   }
 
@@ -49,7 +50,6 @@ export class EditComponent implements AfterViewInit {
   }
 
   inicialContent() {
-    this.engineEdit = new StarEngine('#canvasedit', this.scene);
     KeyboardHandler.add(this.engineEdit.getJoystick());
 
     this.engineEdit.disable();
@@ -76,15 +76,39 @@ export class EditComponent implements AfterViewInit {
 
     this.player.addScript(new PlataformPlayerScript({ speed: 1 }));
 
-    this.engineEdit?.getViewport()?.addInteraction(new ZoomInteraction());
-    this.engineEdit
-      ?.getViewport()
-      ?.addInteraction(new PanInteraction(this.scene.getCamera()));
-    this.engineEdit?.getViewport()?.addInteraction(
+    const viewport = this.engineEdit.getViewport();
+
+    viewport.addInteraction(new ZoomInteraction());
+    viewport.addInteraction(
       new SelectObjectInteraction(this.scene, (obj: any) => {
         this.select(obj);
       })
     );
+    const panControl = {
+      target: this.scene.getCamera(),
+      isInverse: true,
+    };
+    const startPan = (point: any) => {
+      const obj = this.scene.getObjectByCoordinate(point);
+      if (obj && this.selected && obj === this.selected) {
+        panControl.target = obj;
+        panControl.isInverse = false;
+      } else {
+        panControl.target = this.scene.getCamera();
+        panControl.isInverse = true;
+      }
+    };
+    const endPan = () => {
+      panControl.target = this.scene.getCamera();
+      panControl.isInverse = true;
+    };
+    const movePan = (point: any) => {
+      if (panControl.isInverse) {
+        point.neg();
+      }
+      panControl.target.position.move(point.x, point.y);
+    };
+    viewport.addInteraction(new PanInteraction(startPan, endPan, movePan));
   }
 
   play() {
