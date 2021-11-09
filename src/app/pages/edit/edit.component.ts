@@ -11,7 +11,7 @@ import {
   Scene,
   SelectObjectInteraction,
   StarEngine,
-  ZoomInteraction
+  ZoomInteraction,
 } from 'star-gameengine';
 
 @Component({
@@ -55,7 +55,7 @@ export class EditComponent implements AfterViewInit {
     this.engineEdit.disable();
 
     this.player = Factory.rect({
-      name: 'obj1',
+      name: 'player',
       x: 0,
       y: 0,
       w: 30,
@@ -63,6 +63,16 @@ export class EditComponent implements AfterViewInit {
       color: 'green',
     });
     this.scene.add(this.player);
+
+    const eye = Factory.rect({
+      name: 'player_eye',
+      x: 5,
+      y: -2,
+      w: 10,
+      h: 10,
+      color: 'blue',
+    });
+    this.player.add(eye);
 
     var terrain = Factory.rect({
       name: 'terrain',
