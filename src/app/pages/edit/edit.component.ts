@@ -58,8 +58,8 @@ export class EditComponent implements AfterViewInit {
       name: 'player',
       x: 0,
       y: 0,
-      w: 30,
-      h: 30,
+      w: 40,
+      h: 40,
       color: 'green',
     });
     this.scene.add(this.player);
