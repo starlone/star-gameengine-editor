@@ -1,5 +1,6 @@
 import { FlatTreeControl } from '@angular/cdk/tree';
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -13,43 +14,15 @@ import {
   MatTreeFlattener,
 } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
-import { GameObject } from 'star-gameengine';
-
-/**
- * Node for to-do item
- */
-export class TodoItemNode {
-  children: TodoItemNode[] = [];
-  item: string = '';
-}
+import { Factory, GameObject } from 'star-gameengine';
+import { IGameObjectOptions } from 'star-gameengine/dist/options/gameobject.options';
 
 /** Flat to-do item node with expandable and level information */
-export class TodoItemFlatNode {
+export class GameObjectFlatNode {
   item: string = '';
   level: number = 0;
   expandable: boolean = false;
 }
-
-/**
- * The Json object for to-do list data.
- */
-const TREE_DATA = {
-  Groceries: {
-    'Almond Meal flour': null,
-    'Organic eggs': null,
-    'Protein Powder': null,
-    Fruits: {
-      Apple: null,
-      Berries: ['Blueberry', 'Raspberry'],
-      Orange: null,
-    },
-  },
-  Reminders: [
-    'Cook dinner',
-    'Read the Material Design spec',
-    'Upgrade Application to Angular',
-  ],
-};
 
 /**
  * Checklist database, it can build a tree structured Json object.
@@ -58,9 +31,9 @@ const TREE_DATA = {
  */
 @Injectable()
 export class ChecklistDatabase {
-  dataChange = new BehaviorSubject<TodoItemNode[]>([]);
+  dataChange = new BehaviorSubject<GameObject[]>([]);
 
-  get data(): TodoItemNode[] {
+  get data(): GameObject[] {
     return this.dataChange.value;
   }
 
@@ -69,57 +42,27 @@ export class ChecklistDatabase {
   }
 
   initialize() {
-    // Build the tree nodes from Json object. The result is a list of `TodoItemNode` with nested
-    //     file node as children.
-    // const data = this.buildFileTree(TREE_DATA, 0);
-    const data: TodoItemNode[] = [];
+    const data: GameObject[] = [];
 
     // Notify the change.
     this.dataChange.next(data);
   }
 
   load(objects: GameObject[]) {
-    // const data = this.buildFileTree(TREE_DATA, 0);
-    const data = this.buildFileTree(TREE_DATA, 0);
-    this.dataChange.next(data);
-  }
-
-  /**
-   * Build the file structure tree. The `value` is the Json object, or a sub-tree of a Json object.
-   * The return value is the list of `TodoItemNode`.
-   */
-  buildFileTree(obj: any, level: number): TodoItemNode[] {
-    return Object.keys(obj).reduce<TodoItemNode[]>((accumulator, key) => {
-      const value = obj[key];
-      const node = new TodoItemNode();
-      node.item = key;
-
-      if (value != null) {
-        if (typeof value === 'object') {
-          node.children = this.buildFileTree(value, level + 1);
-        } else {
-          node.item = value;
-        }
-      }
-
-      return accumulator.concat(node);
-    }, []);
+    this.dataChange.next(objects);
   }
 
   /** Add an item to to-do list */
-  insertItem(parent: TodoItemNode, name: string): TodoItemNode {
-    if (!parent.children) {
-      parent.children = [];
-    }
-    const newItem = { item: name } as TodoItemNode;
+  insertItem(parent: GameObject, options: IGameObjectOptions): GameObject {
+    const newItem = new GameObject(options);
     parent.children.push(newItem);
     this.dataChange.next(this.data);
     return newItem;
   }
 
-  insertItemAbove(node: TodoItemNode, name: string): TodoItemNode {
+  insertItemAbove(node: GameObject, options: IGameObjectOptions): GameObject {
     const parentNode = this.getParentFromNodes(node);
-    const newItem = { item: name } as TodoItemNode;
+    const newItem = new GameObject(options);
     if (parentNode != null) {
       parentNode.children.splice(parentNode.children.indexOf(node), 0, newItem);
     } else {
@@ -129,9 +72,9 @@ export class ChecklistDatabase {
     return newItem;
   }
 
-  insertItemBelow(node: TodoItemNode, name: string): TodoItemNode {
+  insertItemBelow(node: GameObject, options: IGameObjectOptions): GameObject {
     const parentNode = this.getParentFromNodes(node);
-    const newItem = { item: name } as TodoItemNode;
+    const newItem = new GameObject(options);
     if (parentNode != null) {
       parentNode.children.splice(
         parentNode.children.indexOf(node) + 1,
@@ -145,7 +88,7 @@ export class ChecklistDatabase {
     return newItem;
   }
 
-  getParentFromNodes(node: TodoItemNode): TodoItemNode | undefined {
+  getParentFromNodes(node: GameObject): GameObject | undefined {
     for (const currentRoot of this.data) {
       const parent = this.getParent(currentRoot, node);
       if (parent != null) {
@@ -155,10 +98,7 @@ export class ChecklistDatabase {
     return undefined;
   }
 
-  getParent(
-    currentRoot: TodoItemNode,
-    node: TodoItemNode
-  ): TodoItemNode | undefined {
+  getParent(currentRoot: GameObject, node: GameObject): GameObject | undefined {
     if (currentRoot.children && currentRoot.children.length > 0) {
       for (const child of currentRoot.children) {
         if (child === node) {
@@ -174,18 +114,18 @@ export class ChecklistDatabase {
     return undefined;
   }
 
-  updateItem(node: TodoItemNode, name: string) {
-    node.item = name;
+  updateItem(node: GameObject, name: string) {
+    node.name = name;
     this.dataChange.next(this.data);
   }
 
-  deleteItem(node: TodoItemNode) {
+  deleteItem(node: GameObject) {
     this.deleteNode(this.data, node);
     this.dataChange.next(this.data);
   }
 
-  copyPasteItem(from: TodoItemNode, to: TodoItemNode): TodoItemNode {
-    const newItem = this.insertItem(to, from.item);
+  copyPasteItem(from: GameObject, to: GameObject): GameObject {
+    const newItem = this.insertItem(to, from.toJSON());
     if (from.children) {
       from.children.forEach((child) => {
         this.copyPasteItem(child, newItem);
@@ -194,8 +134,8 @@ export class ChecklistDatabase {
     return newItem;
   }
 
-  copyPasteItemAbove(from: TodoItemNode, to: TodoItemNode): TodoItemNode {
-    const newItem = this.insertItemAbove(to, from.item);
+  copyPasteItemAbove(from: GameObject, to: GameObject): GameObject {
+    const newItem = this.insertItemAbove(to, from.toJSON());
     if (from.children) {
       from.children.forEach((child) => {
         this.copyPasteItem(child, newItem);
@@ -204,8 +144,8 @@ export class ChecklistDatabase {
     return newItem;
   }
 
-  copyPasteItemBelow(from: TodoItemNode, to: TodoItemNode): TodoItemNode {
-    const newItem = this.insertItemBelow(to, from.item);
+  copyPasteItemBelow(from: GameObject, to: GameObject): GameObject {
+    const newItem = this.insertItemBelow(to, from.toJSON());
     if (from.children) {
       from.children.forEach((child) => {
         this.copyPasteItem(child, newItem);
@@ -214,7 +154,7 @@ export class ChecklistDatabase {
     return newItem;
   }
 
-  deleteNode(nodes: TodoItemNode[], nodeToDelete: TodoItemNode) {
+  deleteNode(nodes: GameObject[], nodeToDelete: GameObject) {
     const index = nodes.indexOf(nodeToDelete, 0);
     if (index > -1) {
       nodes.splice(index, 1);
@@ -234,29 +174,29 @@ export class ChecklistDatabase {
   styleUrls: ['./panel-objects-tree.component.scss'],
   providers: [ChecklistDatabase],
 })
-export class PanelObjectsTreeComponent {
+export class PanelObjectsTreeComponent implements AfterViewInit {
   @Input() objs: GameObject[] = [];
   @Input() selected?: GameObject;
 
   @Output() onSelect: EventEmitter<GameObject> = new EventEmitter();
 
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
-  flatNodeMap = new Map<TodoItemFlatNode, TodoItemNode>();
+  flatNodeMap = new Map<GameObjectFlatNode, GameObject>();
 
   /** Map from nested node to flattened node. This helps us to keep the same object for selection */
-  nestedNodeMap = new Map<TodoItemNode, TodoItemFlatNode>();
+  nestedNodeMap = new Map<GameObject, GameObjectFlatNode>();
 
   /** A selected parent node to be inserted */
-  selectedParent: TodoItemFlatNode | null = null;
+  selectedParent: GameObjectFlatNode | null = null;
 
   /** The new item's name */
   newItemName = '';
 
-  treeControl: FlatTreeControl<TodoItemFlatNode>;
+  treeControl: FlatTreeControl<GameObjectFlatNode>;
 
-  treeFlattener: MatTreeFlattener<TodoItemNode, TodoItemFlatNode>;
+  treeFlattener: MatTreeFlattener<GameObject, GameObjectFlatNode>;
 
-  dataSource: MatTreeFlatDataSource<TodoItemNode, TodoItemFlatNode>;
+  dataSource: MatTreeFlatDataSource<GameObject, GameObjectFlatNode>;
 
   /* Drag and drop */
   dragNode: any;
@@ -273,7 +213,7 @@ export class PanelObjectsTreeComponent {
       this.isExpandable,
       this.getChildren
     );
-    this.treeControl = new FlatTreeControl<TodoItemFlatNode>(
+    this.treeControl = new FlatTreeControl<GameObjectFlatNode>(
       this.getLevel,
       this.isExpandable
     );
@@ -286,30 +226,32 @@ export class PanelObjectsTreeComponent {
       this.dataSource.data = [];
       this.dataSource.data = data;
     });
-    database.load(this.objs)
+  }
+  ngAfterViewInit(): void {
+    this.database.load(this.objs);
   }
 
-  getLevel = (node: TodoItemFlatNode) => node.level;
+  getLevel = (node: GameObjectFlatNode) => node.level;
 
-  isExpandable = (node: TodoItemFlatNode) => node.expandable;
+  isExpandable = (node: GameObjectFlatNode) => node.expandable;
 
-  getChildren = (node: TodoItemNode): TodoItemNode[] => node.children;
+  getChildren = (node: GameObject): GameObject[] => node.children;
 
-  hasChild = (_: number, _nodeData: TodoItemFlatNode) => _nodeData.expandable;
+  hasChild = (_: number, _nodeData: GameObjectFlatNode) => _nodeData.expandable;
 
-  hasNoContent = (_: number, _nodeData: TodoItemFlatNode) =>
+  hasNoContent = (_: number, _nodeData: GameObjectFlatNode) =>
     _nodeData.item === '';
 
   /**
    * Transformer to convert nested node to flat node. Record the nodes in maps for later use.
    */
-  transformer = (node: TodoItemNode, level: number) => {
+  transformer = (node: GameObject, level: number) => {
     const existingNode = this.nestedNodeMap.get(node);
     const flatNode =
-      existingNode && existingNode.item === node.item
+      existingNode && existingNode.item === node.name
         ? existingNode
-        : new TodoItemFlatNode();
-    flatNode.item = node.item;
+        : new GameObjectFlatNode();
+    flatNode.item = node.name;
     flatNode.level = level;
     flatNode.expandable = node.children && node.children.length > 0;
     this.flatNodeMap.set(flatNode, node);
@@ -318,16 +260,19 @@ export class PanelObjectsTreeComponent {
   };
 
   /** Select the category so we can insert the new item. */
-  addNewItem(node: TodoItemFlatNode) {
+  addNewItem(node: GameObjectFlatNode) {
     const parentNode = this.flatNodeMap.get(node);
     if (parentNode) {
-      this.database.insertItem(parentNode, '');
+      this.database.insertItem(parentNode, {
+        name: '',
+        position: { x: 0, y: 0 },
+      });
     }
     this.treeControl.expand(node);
   }
 
   /** Save the node to database */
-  saveNode(node: TodoItemFlatNode, itemValue: string) {
+  saveNode(node: GameObjectFlatNode, itemValue: string) {
     const nestedNode = this.flatNodeMap.get(node);
     if (nestedNode) {
       this.database.updateItem(nestedNode, itemValue);
@@ -363,7 +308,6 @@ export class PanelObjectsTreeComponent {
     }
 
     // Handle drag area
-    const percentageX = event.offsetX / event.target.clientWidth;
     const percentageY = event.offsetY / event.target.clientHeight;
     if (percentageY < 0.25) {
       this.dragNodeExpandOverArea = 'above';
@@ -377,7 +321,7 @@ export class PanelObjectsTreeComponent {
   handleDrop(event: any, node: any) {
     event.preventDefault();
     if (node !== this.dragNode) {
-      let newItem: TodoItemNode;
+      let newItem: GameObject;
       const dragNode = this.flatNodeMap.get(this.dragNode);
       const flatNodeMap = this.flatNodeMap.get(node);
       if (!dragNode || !flatNodeMap) return;
