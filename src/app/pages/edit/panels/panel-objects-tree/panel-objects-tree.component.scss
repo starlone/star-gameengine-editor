@@ -11,3 +11,13 @@
 .drop-center {
   background-color: #dddddd;
 }
+
+.selected,
+.selected.mat-tree-node:hover {
+  background-color: #4558be;
+  color: #eee;
+}
+
+div[draggable] {
+  cursor: pointer;
+}

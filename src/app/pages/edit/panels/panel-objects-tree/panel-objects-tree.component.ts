@@ -21,6 +21,7 @@ export class GameObjectFlatNode {
   item: string = '';
   level: number = 0;
   expandable: boolean = false;
+  uid: string = '';
 }
 
 /**
@@ -241,6 +242,12 @@ export class PanelObjectsTreeComponent implements AfterViewInit {
   hasNoContent = (_: number, _nodeData: GameObjectFlatNode) =>
     _nodeData.item === '';
 
+  select(nodeFlat: GameObjectFlatNode) {
+    const node = this.flatNodeMap.get(nodeFlat);
+    console.log(node);
+    this.onSelect.emit(node);
+  }
+
   /**
    * Transformer to convert nested node to flat node. Record the nodes in maps for later use.
    */
@@ -252,6 +259,7 @@ export class PanelObjectsTreeComponent implements AfterViewInit {
         : new GameObjectFlatNode();
     flatNode.item = node.name;
     flatNode.level = level;
+    flatNode.uid = node.uid;
     flatNode.expandable = node.children && node.children.length > 0;
     this.flatNodeMap.set(flatNode, node);
     this.nestedNodeMap.set(node, flatNode);

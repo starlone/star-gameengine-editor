@@ -20,6 +20,8 @@
       (dragover)="handleDragOver($event, node)"
       (drop)="handleDrop($event, node)"
       (dragend)="handleDragEnd($event)"
+      (click)="select(node)"
+      [class.selected]="selected && selected.uid == node.uid"
     >
       {{ node.item }}
     </div>
@@ -60,6 +62,8 @@
       (dragover)="handleDragOver($event, node)"
       (drop)="handleDrop($event, node)"
       (dragend)="handleDragEnd($event)"
+      (click)="select(node)"
+      [class.selected]="selected && selected.uid == node.uid"
     >
       {{ node.item }}
     </div>
