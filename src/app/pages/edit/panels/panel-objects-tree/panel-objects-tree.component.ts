@@ -14,8 +14,7 @@ import {
   MatTreeFlattener,
 } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
-import { Factory, GameObject } from 'star-gameengine';
-import { IGameObjectOptions } from 'star-gameengine/dist/options/gameobject.options';
+import { GameObject, IGameObjectOptions } from 'star-gameengine';
 
 /** Flat to-do item node with expandable and level information */
 export class GameObjectFlatNode {
@@ -127,7 +126,7 @@ export class ChecklistDatabase {
   copyPasteItem(from: GameObject, to: GameObject): GameObject {
     const newItem = this.insertItem(to, from.toJSON());
     if (from.children) {
-      from.children.forEach((child) => {
+      from.children.forEach((child: GameObject) => {
         this.copyPasteItem(child, newItem);
       });
     }
@@ -137,7 +136,7 @@ export class ChecklistDatabase {
   copyPasteItemAbove(from: GameObject, to: GameObject): GameObject {
     const newItem = this.insertItemAbove(to, from.toJSON());
     if (from.children) {
-      from.children.forEach((child) => {
+      from.children.forEach((child: GameObject) => {
         this.copyPasteItem(child, newItem);
       });
     }
@@ -147,7 +146,7 @@ export class ChecklistDatabase {
   copyPasteItemBelow(from: GameObject, to: GameObject): GameObject {
     const newItem = this.insertItemBelow(to, from.toJSON());
     if (from.children) {
-      from.children.forEach((child) => {
+      from.children.forEach((child: GameObject) => {
         this.copyPasteItem(child, newItem);
       });
     }
@@ -318,24 +317,26 @@ export class PanelObjectsTreeComponent implements AfterViewInit {
     }
   }
 
-  handleDrop(event: any, node: any) {
+  handleDrop(event: any, node: GameObjectFlatNode) {
     event.preventDefault();
     if (node !== this.dragNode) {
-      let newItem: GameObject;
+      let newItem: GameObject | undefined = undefined;
       const dragNode = this.flatNodeMap.get(this.dragNode);
-      const flatNodeMap = this.flatNodeMap.get(node);
+      const flatNodeMap: GameObject | undefined = this.flatNodeMap.get(node);
       if (!dragNode || !flatNodeMap) return;
       if (this.dragNodeExpandOverArea === 'above') {
         newItem = this.database.copyPasteItemAbove(dragNode, flatNodeMap);
       } else if (this.dragNodeExpandOverArea === 'below') {
         newItem = this.database.copyPasteItemBelow(dragNode, flatNodeMap);
-      } else {
+      } else if (dragNode.parent != flatNodeMap) {
         newItem = this.database.copyPasteItem(dragNode, flatNodeMap);
       }
-      this.database.deleteItem(dragNode);
-      const newnode = this.nestedNodeMap.get(newItem);
-      if (!newnode) return;
-      this.treeControl.expandDescendants(newnode);
+      if (newItem) {
+        this.database.deleteItem(dragNode);
+        const newnode = this.nestedNodeMap.get(newItem);
+        if (!newnode) return;
+        this.treeControl.expandDescendants(newnode);
+      }
     }
     this.dragNode = null;
     this.dragNodeExpandOverNode = null;

@@ -72,7 +72,7 @@ export class EditComponent implements AfterViewInit {
       h: 10,
       color: 'blue',
     });
-    this.player.add(eye);
+    this.player.addChild(eye);
 
     var terrain = Factory.rect({
       name: 'terrain',
