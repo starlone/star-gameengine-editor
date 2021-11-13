@@ -7,11 +7,11 @@ import {
   Injectable,
   Input,
   Output,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import {
   MatTreeFlatDataSource,
-  MatTreeFlattener
+  MatTreeFlattener,
 } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
 import { GameObject, IGameObjectOptions } from 'star-gameengine';
