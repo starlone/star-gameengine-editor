@@ -7,11 +7,11 @@ import {
   Injectable,
   Input,
   Output,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import {
   MatTreeFlatDataSource,
-  MatTreeFlattener,
+  MatTreeFlattener
 } from '@angular/material/tree';
 import { BehaviorSubject } from 'rxjs';
 import { GameObject, IGameObjectOptions } from 'star-gameengine';
@@ -38,13 +38,7 @@ export class ChecklistDatabase {
   }
 
   constructor() {
-    this.initialize();
-  }
-
-  initialize() {
     const data: GameObject[] = [];
-
-    // Notify the change.
     this.dataChange.next(data);
   }
 
@@ -124,34 +118,41 @@ export class ChecklistDatabase {
     this.dataChange.next(this.data);
   }
 
-  copyPasteItem(from: GameObject, to: GameObject): GameObject {
-    const newItem = this.insertItem(to, from.toJSON());
-    if (from.children) {
-      from.children.forEach((child: GameObject) => {
-        this.copyPasteItem(child, newItem);
-      });
-    }
-    return newItem;
+  private removeOldParent(from: GameObject) {
+    const parent = this.getParentFromNodes(from);
+    const children = parent != null ? parent.children : this.data;
+    this.deleteNode(children, from);
   }
 
-  copyPasteItemAbove(from: GameObject, to: GameObject): GameObject {
-    const newItem = this.insertItemAbove(to, from.toJSON());
-    if (from.children) {
-      from.children.forEach((child: GameObject) => {
-        this.copyPasteItem(child, newItem);
-      });
-    }
-    return newItem;
+  moveItem(from: GameObject, to: GameObject): GameObject {
+    this.removeOldParent(from);
+
+    to.children.push(from);
+    from.setParent(to);
+    this.dataChange.next(this.data);
+    return from;
   }
 
-  copyPasteItemBelow(from: GameObject, to: GameObject): GameObject {
-    const newItem = this.insertItemBelow(to, from.toJSON());
-    if (from.children) {
-      from.children.forEach((child: GameObject) => {
-        this.copyPasteItem(child, newItem);
-      });
-    }
-    return newItem;
+  moveItemAtIndex(from: GameObject, to: GameObject, increment: number) {
+    this.removeOldParent(from);
+
+    const parentNode = this.getParentFromNodes(to);
+    const objs = parentNode != null ? parentNode.children : this.data;
+
+    const index = objs.indexOf(to);
+    objs.splice(index + increment, 0, from);
+
+    from.setParent(parentNode);
+    this.dataChange.next(this.data);
+    return from;
+  }
+
+  moveItemAbove(from: GameObject, to: GameObject): GameObject {
+    return this.moveItemAtIndex(from, to, 0);
+  }
+
+  moveItemBelow(from: GameObject, to: GameObject): GameObject {
+    return this.moveItemAtIndex(from, to, 1);
   }
 
   deleteNode(nodes: GameObject[], nodeToDelete: GameObject) {
@@ -333,14 +334,14 @@ export class PanelObjectsTreeComponent implements AfterViewInit {
       const flatNodeMap: GameObject | undefined = this.flatNodeMap.get(node);
       if (!dragNode || !flatNodeMap) return;
       if (this.dragNodeExpandOverArea === 'above') {
-        newItem = this.database.copyPasteItemAbove(dragNode, flatNodeMap);
+        newItem = this.database.moveItemAbove(dragNode, flatNodeMap);
       } else if (this.dragNodeExpandOverArea === 'below') {
-        newItem = this.database.copyPasteItemBelow(dragNode, flatNodeMap);
+        newItem = this.database.moveItemBelow(dragNode, flatNodeMap);
       } else if (dragNode.parent != flatNodeMap) {
-        newItem = this.database.copyPasteItem(dragNode, flatNodeMap);
+        newItem = this.database.moveItem(dragNode, flatNodeMap);
       }
       if (newItem) {
-        this.database.deleteItem(dragNode);
+        // this.database.deleteItem(dragNode);
         const newnode = this.nestedNodeMap.get(newItem);
         if (!newnode) return;
         this.treeControl.expandDescendants(newnode);
