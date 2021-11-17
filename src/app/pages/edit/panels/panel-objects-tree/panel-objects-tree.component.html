@@ -1,76 +1,43 @@
-<mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-  <mat-tree-node
-    *matTreeNodeDef="let node"
-    matTreeNodeToggle
-    matTreeNodePadding
-  >
-    <button mat-icon-button disabled></button>
-    <div
-      class="checklist-leaf-node"
-      [ngClass]="{
-        'drop-above':
-          dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
-        'drop-below':
-          dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
-        'drop-center':
-          dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
-      }"
-      draggable="true"
-      (dragstart)="handleDragStart($event, node)"
-      (dragover)="handleDragOver($event, node)"
-      (drop)="handleDrop($event, node)"
-      (dragend)="handleDragEnd($event)"
-      (click)="select(node)"
-      [class.selected]="selected && selected.uid == node.uid"
-    >
-      {{ node.item }}
+<mat-card class="panel-card">
+  <mat-card-title>Game Objects</mat-card-title>
+  <mat-card-content>
+    <div>
+      <button type="button" mat-raised-button (click)="newObject()" color="primary" style="float: right">
+        <mat-icon>add</mat-icon>
+        Add
+      </button>
+      <div style="clear: both"></div>
     </div>
-  </mat-tree-node>
 
-  <mat-tree-node
-    *matTreeNodeDef="let node; when: hasNoContent"
-    matTreeNodePadding
-  >
-    <button mat-icon-button disabled></button>
-    <mat-form-field>
-      <input matInput #itemValue placeholder="New item..." />
-    </mat-form-field>
-    <button mat-button (click)="saveNode(node, itemValue.value)">Save</button>
-  </mat-tree-node>
+    <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+      <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding
+        [class.selected]="selected && selected.uid == node.uid">
+        <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.filename" *ngIf="hasChild(node)">
+          <mat-icon class="mat-icon-rtl-mirror">
+            {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
+          </mat-icon>
+        </button>
+        <button mat-icon-button disabled *ngIf="!hasChild(node)"></button>
+        <div class="drag-text" [ngClass]="{
+            'drop-above':
+              dragNodeExpandOverArea === 'above' &&
+              dragNodeExpandOverNode === node,
+            'drop-below':
+              dragNodeExpandOverArea === 'below' &&
+              dragNodeExpandOverNode === node,
+            'drop-center':
+              dragNodeExpandOverArea === 'center' &&
+              dragNodeExpandOverNode === node
+          }" draggable="true" (dragstart)="handleDragStart($event, node)" (dragover)="handleDragOver($event, node)"
+          (drop)="handleDrop($event, node)" (dragend)="handleDragEnd($event)" (click)="select(node)">
+          {{ node.item }}
+        </div>
+        <button mat-icon-button (click)="newObject(node)">
+          <mat-icon>add</mat-icon>
+        </button>
+      </mat-tree-node>
+    </mat-tree>
 
-  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" matTreeNodePadding>
-    <button
-      mat-icon-button
-      matTreeNodeToggle
-      [attr.aria-label]="'toggle ' + node.filename"
-    >
-      <mat-icon class="mat-icon-rtl-mirror">
-        {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
-      </mat-icon>
-    </button>
-    <div
-      [ngClass]="{
-        'drop-above':
-          dragNodeExpandOverArea === 'above' && dragNodeExpandOverNode === node,
-        'drop-below':
-          dragNodeExpandOverArea === 'below' && dragNodeExpandOverNode === node,
-        'drop-center':
-          dragNodeExpandOverArea === 'center' && dragNodeExpandOverNode === node
-      }"
-      draggable="true"
-      (dragstart)="handleDragStart($event, node)"
-      (dragover)="handleDragOver($event, node)"
-      (drop)="handleDrop($event, node)"
-      (dragend)="handleDragEnd($event)"
-      (click)="select(node)"
-      [class.selected]="selected && selected.uid == node.uid"
-    >
-      {{ node.item }}
-    </div>
-    <button mat-icon-button (click)="addNewItem(node)">
-      <mat-icon>add</mat-icon>
-    </button>
-  </mat-tree-node>
-</mat-tree>
-
-<span #emptyItem></span>
+    <span #emptyItem></span>
+  </mat-card-content>
+</mat-card>

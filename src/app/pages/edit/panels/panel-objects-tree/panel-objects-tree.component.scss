@@ -21,3 +21,12 @@
 div[draggable] {
   cursor: pointer;
 }
+
+.drag-text {
+  flex: auto;
+}
+
+mat-tree-node:hover {
+  background-color: #eee;
+}
+
