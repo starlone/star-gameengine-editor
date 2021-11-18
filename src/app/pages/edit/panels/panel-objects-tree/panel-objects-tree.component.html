@@ -2,7 +2,13 @@
   <mat-card-title>Game Objects</mat-card-title>
   <mat-card-content>
     <div>
-      <button type="button" mat-raised-button (click)="newObject()" color="primary" style="float: right">
+      <button
+        type="button"
+        mat-raised-button
+        (click)="newObject()"
+        color="primary"
+        style="float: right"
+      >
         <mat-icon>add</mat-icon>
         Add
       </button>
@@ -10,15 +16,25 @@
     </div>
 
     <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-      <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding
-        [class.selected]="selected && selected.uid == node.uid">
-        <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.filename" *ngIf="hasChild(node)">
+      <mat-tree-node
+        *matTreeNodeDef="let node"
+        matTreeNodePadding
+        [class.selected]="selected && selected.uid == node.uid"
+      >
+        <button
+          mat-icon-button
+          matTreeNodeToggle
+          [attr.aria-label]="'toggle ' + node.filename"
+          *ngIf="hasChild(node)"
+        >
           <mat-icon class="mat-icon-rtl-mirror">
             {{ treeControl.isExpanded(node) ? "expand_more" : "chevron_right" }}
           </mat-icon>
         </button>
         <button mat-icon-button disabled *ngIf="!hasChild(node)"></button>
-        <div class="drag-text" [ngClass]="{
+        <div
+          class="drag-text"
+          [ngClass]="{
             'drop-above':
               dragNodeExpandOverArea === 'above' &&
               dragNodeExpandOverNode === node,
@@ -28,8 +44,14 @@
             'drop-center':
               dragNodeExpandOverArea === 'center' &&
               dragNodeExpandOverNode === node
-          }" draggable="true" (dragstart)="handleDragStart($event, node)" (dragover)="handleDragOver($event, node)"
-          (drop)="handleDrop($event, node)" (dragend)="handleDragEnd($event)" (click)="select(node)">
+          }"
+          draggable="true"
+          (dragstart)="handleDragStart($event, node)"
+          (dragover)="handleDragOver($event, node)"
+          (drop)="handleDrop($event, node)"
+          (dragend)="handleDragEnd($event)"
+          (click)="select(node)"
+        >
           {{ node.item }}
         </div>
         <button mat-icon-button (click)="newObject(node)">
