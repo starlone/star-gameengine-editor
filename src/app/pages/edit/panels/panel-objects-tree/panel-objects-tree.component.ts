@@ -136,7 +136,11 @@ export class PanelObjectsTreeComponent implements AfterViewInit {
     });
   }
 
-  /** Save the node to database */
+  deleteObject(node: GameObjectFlatNode) {
+    const obj = this.flatNodeMap.get(node);
+    if (obj) this.database.deleteItem(obj);
+  }
+
   saveNode(node: GameObjectFlatNode, itemValue: string) {
     const nestedNode = this.flatNodeMap.get(node);
     if (nestedNode) {
