@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { GameObject, IGameObjectOptions } from 'star-gameengine';
+import { GameObject } from 'star-gameengine';
 
 /**
  * Checklist database, it can build a tree structured Json object.

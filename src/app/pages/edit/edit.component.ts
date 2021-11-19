@@ -6,6 +6,7 @@ import {
   Factory,
   GameObject,
   KeyboardHandler,
+  MeshRenderer,
   PanInteraction,
   PlataformPlayerScript,
   Scene,
@@ -13,6 +14,7 @@ import {
   StarEngine,
   ZoomInteraction,
 } from 'star-gameengine';
+import { Renderer } from 'star-gameengine/dist/renderers/renderer';
 
 @Component({
   selector: 'app-edit',
@@ -31,6 +33,7 @@ export class EditComponent implements AfterViewInit {
 
   scene: Scene = new Scene();
   selected?: GameObject;
+  oldRenderer?: Renderer;
   player?: GameObject;
   isPlaying = false;
   engineEdit: StarEngine;
@@ -45,8 +48,25 @@ export class EditComponent implements AfterViewInit {
     this.engineEdit?.start();
   }
 
-  select(item: any) {
+  select(item?: GameObject) {
+    this.deselect();
+    if (!item) return;
     this.selected = item;
+    this.oldRenderer = item.renderer;
+    this.selected.setRenderer(
+      new MeshRenderer({
+        color: '#ffb74d',
+        strokeStyle: '#e65100',
+        lineWidth: 5,
+      })
+    );
+  }
+
+  deselect() {
+    if (this.selected && this.oldRenderer) {
+      this.selected.setRenderer(this.oldRenderer);
+    }
+    this.selected = undefined;
   }
 
   inicialContent() {

@@ -101,7 +101,6 @@ export class PanelObjectsTreeComponent implements AfterViewInit {
 
   select(nodeFlat: GameObjectFlatNode) {
     const node = this.flatNodeMap.get(nodeFlat);
-    console.log(node);
     this.onSelect.emit(node);
   }
 
