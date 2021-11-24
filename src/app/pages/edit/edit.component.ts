@@ -104,7 +104,7 @@ export class EditComponent implements AfterViewInit {
     });
     this.scene.add(terrain);
 
-    this.player.addScript(new PlataformPlayerScript({ speed: 1 }));
+    this.player.addScript(new PlataformPlayerScript({ speed: 0.4 }));
 
     const viewport = this.engineEdit.getViewport();
 
@@ -143,6 +143,7 @@ export class EditComponent implements AfterViewInit {
   }
 
   play() {
+    this.deselect();
     if (!this.engineEdit) return;
     if (this.isPlaying) {
       this.enginePlay?.disable();
