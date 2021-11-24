@@ -5,13 +5,17 @@
       <button
         type="button"
         mat-raised-button
-        (click)="newObject()"
         color="primary"
         style="float: right"
+        [matMenuTriggerFor]="menu"
       >
         <mat-icon>add</mat-icon>
         Add
       </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="newRect()">Rect</button>
+        <button mat-menu-item (click)="newCircle()">Circle</button>
+      </mat-menu>
       <div style="clear: both"></div>
     </div>
 
@@ -54,9 +58,13 @@
         >
           {{ node.item }}
         </div>
-        <button mat-icon-button (click)="newObject(node)">
+        <button mat-icon-button [matMenuTriggerFor]="menu">
           <mat-icon>add</mat-icon>
         </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="newRect(node)">Rect</button>
+          <button mat-menu-item (click)="newCircle(node)">Circle</button>
+        </mat-menu>
         <button mat-icon-button (click)="deleteObject(node)" color="warn">
           <mat-icon>delete</mat-icon>
         </button>

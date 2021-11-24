@@ -14,6 +14,7 @@ import {
   MatTreeFlattener,
 } from '@angular/material/tree';
 import { GameObject } from 'star-gameengine';
+import { DialogNewcircleComponent } from '../../dialogs/dialog-newcircle/dialog-newcircle.component';
 import { DialogNewrectComponent } from '../../dialogs/dialog-newrect/dialog-newrect.component';
 import { ChecklistDatabase } from './panel-objects-tree.database';
 
@@ -122,11 +123,19 @@ export class PanelObjectsTreeComponent implements AfterViewInit {
     return flatNode;
   };
 
-  newObject(node?: GameObjectFlatNode) {
+  newRect(node?: GameObjectFlatNode) {
+    this.newObject(DialogNewrectComponent, node);
+  }
+
+  newCircle(node?: GameObjectFlatNode) {
+    this.newObject(DialogNewcircleComponent, node);
+  }
+
+  newObject(component: any, node?: GameObjectFlatNode) {
     let parentNode: GameObject | undefined;
     if (node) parentNode = this.flatNodeMap.get(node);
 
-    const dialogRef = this.dialog.open(DialogNewrectComponent);
+    const dialogRef = this.dialog.open(component);
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.database.insertItem(result, parentNode);

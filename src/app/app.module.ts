@@ -8,6 +8,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTreeModule } from '@angular/material/tree';
@@ -16,6 +17,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DialogImportComponent } from './pages/edit/dialogs/dialog-import/dialog-import.component';
+import { DialogNewcircleComponent } from './pages/edit/dialogs/dialog-newcircle/dialog-newcircle.component';
 import { DialogNewrectComponent } from './pages/edit/dialogs/dialog-newrect/dialog-newrect.component';
 import { EditComponent } from './pages/edit/edit.component';
 import { PanelObjectsTreeComponent } from './pages/edit/panels/panel-objects-tree/panel-objects-tree.component';
@@ -27,6 +29,7 @@ import { ToolbarComponent } from './pages/edit/toolbar/toolbar.component';
     AppComponent,
     DialogImportComponent,
     DialogNewrectComponent,
+    DialogNewcircleComponent,
     EditComponent,
     PanelObjectsTreeComponent,
     PanelPropertiesComponent,
@@ -42,6 +45,7 @@ import { ToolbarComponent } from './pages/edit/toolbar/toolbar.component';
     MatButtonModule,
     MatIconModule,
     MatInputModule,
+    MatMenuModule,
     FormsModule,
     MatDialogModule,
     MatTreeModule,
