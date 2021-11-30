@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DialogNewcircleComponent } from './dialog-newcircle.component';
 
-
 describe('DialogImportComponent', () => {
   let component: DialogNewcircleComponent;
   let fixture: ComponentFixture<DialogNewcircleComponent>;
