@@ -9,12 +9,12 @@ import {
   MeshRenderer,
   PanInteraction,
   PlataformPlayerScript,
+  Renderer,
   Scene,
   SelectObjectInteraction,
   StarEngine,
-  ZoomInteraction,
+  ZoomInteraction
 } from 'star-gameengine';
-import { Renderer } from 'star-gameengine/dist/renderers/renderer';
 
 @Component({
   selector: 'app-edit',
@@ -81,6 +81,7 @@ export class EditComponent implements AfterViewInit {
       w: 40,
       h: 40,
       color: 'green',
+      rigidBody: {},
     });
     this.scene.add(this.player);
 
@@ -101,6 +102,7 @@ export class EditComponent implements AfterViewInit {
       w: 800,
       h: 30,
       static: true,
+      rigidBody: {},
     });
     this.scene.add(terrain);
 
