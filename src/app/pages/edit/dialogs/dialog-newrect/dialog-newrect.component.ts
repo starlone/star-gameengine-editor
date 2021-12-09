@@ -17,6 +17,8 @@ export class DialogNewrectComponent {
     h: 100,
     color: 'green',
     angle: 0,
+    rigidBody: {},
+    static: true,
   };
   constructor(private dialogRef: MatDialogRef<DialogNewrectComponent>) {}
 

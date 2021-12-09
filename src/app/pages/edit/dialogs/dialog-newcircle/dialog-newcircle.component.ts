@@ -17,6 +17,8 @@ export class DialogNewcircleComponent {
     maxSides: 25,
     color: 'green',
     angle: 0,
+    rigidBody: {},
+    static: true,
   };
   constructor(private dialogRef: MatDialogRef<DialogNewcircleComponent>) {}
 

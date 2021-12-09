@@ -18,6 +18,7 @@ export class ToolbarComponent {
   @Input() isPlaying?: boolean;
 
   @Output() onPlay: EventEmitter<void> = new EventEmitter();
+  @Output() onImport: EventEmitter<void> = new EventEmitter();
   @Output() onSideLeft: EventEmitter<void> = new EventEmitter();
   @Output() onSideRight: EventEmitter<void> = new EventEmitter();
 
@@ -44,9 +45,7 @@ export class ToolbarComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        const newscene = new Scene(result);
-        this.engineEdit?.setScene(newscene);
-        this.scene = newscene;
+        this.onImport.emit(result);
       }
     });
   }

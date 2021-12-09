@@ -13,7 +13,7 @@ import {
   Scene,
   SelectObjectInteraction,
   StarEngine,
-  ZoomInteraction
+  ZoomInteraction,
 } from 'star-gameengine';
 
 @Component({
@@ -38,6 +38,7 @@ export class EditComponent implements AfterViewInit {
   isPlaying = false;
   engineEdit: StarEngine;
   enginePlay?: StarEngine;
+  loading = false;
 
   constructor(private breakpointObserver: BreakpointObserver) {
     this.engineEdit = new StarEngine('#canvasedit', this.scene);
@@ -157,5 +158,16 @@ export class EditComponent implements AfterViewInit {
       this.enginePlay.start();
     }
     this.isPlaying = !this.isPlaying;
+  }
+
+  import(data: any) {
+    this.loading = true;
+    const newscene = new Scene(data);
+    this.engineEdit?.setScene(newscene);
+    this.scene = newscene;
+    // Force reload panel-objects-tree.component
+    setTimeout(() => {
+      this.loading = false;
+    }, 500);
   }
 }
