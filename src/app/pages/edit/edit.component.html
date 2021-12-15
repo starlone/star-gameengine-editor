@@ -17,12 +17,12 @@
     [mode]="'over'"
     [opened]="(isHandset$ | async) === false"
     position="start"
-    >
+  >
     <app-panel-objects-tree
-    [objs]="scene.objs"
-    [selected]="selected"
-    (onSelect)="select($event)"
-    *ngIf="!loading"
+      [objs]="scene.objs"
+      [selected]="selected"
+      (onSelect)="select($event)"
+      *ngIf="!loading"
     >
     </app-panel-objects-tree>
   </mat-sidenav>
