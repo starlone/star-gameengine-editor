@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Factory } from 'star-gameengine';
-import { IFactoryOptions } from 'star-gameengine/dist/options/factory.options';
+import { Factory, IFactoryOptions } from 'star-gameengine';
 
 @Component({
   selector: 'app-dialog-newcircle',
@@ -9,6 +9,8 @@ import { IFactoryOptions } from 'star-gameengine/dist/options/factory.options';
   styleUrls: ['./dialog-newcircle.component.scss'],
 })
 export class DialogNewcircleComponent {
+  formName = new FormControl('', [Validators.required]);
+
   params: IFactoryOptions = {
     name: '',
     x: 0,
@@ -23,6 +25,8 @@ export class DialogNewcircleComponent {
   constructor(private dialogRef: MatDialogRef<DialogNewcircleComponent>) {}
 
   create() {
+    this.params.name = this.formName.value;
+    if (!this.params.name) return;
     const obj = Factory.circle(this.params);
     this.dialogRef.close(obj);
   }

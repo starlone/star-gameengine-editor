@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Factory } from 'star-gameengine';
-import { IFactoryOptions } from 'star-gameengine/dist/options/factory.options';
+import { Factory, IFactoryOptions } from 'star-gameengine';
 
 @Component({
   selector: 'app-dialog-newrect',
@@ -9,6 +9,8 @@ import { IFactoryOptions } from 'star-gameengine/dist/options/factory.options';
   styleUrls: ['./dialog-newrect.component.scss'],
 })
 export class DialogNewrectComponent {
+  formName = new FormControl('', [Validators.required]);
+
   params: IFactoryOptions = {
     name: '',
     x: 0,
@@ -23,6 +25,8 @@ export class DialogNewrectComponent {
   constructor(private dialogRef: MatDialogRef<DialogNewrectComponent>) {}
 
   create() {
+    this.params.name = this.formName.value;
+    if (!this.params.name) return;
     const obj = Factory.rect(this.params);
     this.dialogRef.close(obj);
   }
