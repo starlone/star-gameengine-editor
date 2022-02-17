@@ -1,13 +1,5 @@
 import { FlatTreeControl } from '@angular/cdk/tree';
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   MatTreeFlatDataSource,
@@ -16,6 +8,7 @@ import {
 import { GameObject } from 'star-gameengine';
 import { DialogNewcircleComponent } from '../../dialogs/dialog-newcircle/dialog-newcircle.component';
 import { DialogNewrectComponent } from '../../dialogs/dialog-newrect/dialog-newrect.component';
+import { GameService } from '../../services/game.service';
 import { ChecklistDatabase } from './panel-objects-tree.database';
 
 /** Flat to-do item node with expandable and level information */
@@ -33,11 +26,6 @@ export class GameObjectFlatNode {
   providers: [ChecklistDatabase],
 })
 export class PanelObjectsTreeComponent implements AfterViewInit {
-  @Input() objs: GameObject[] = [];
-  @Input() selected?: GameObject;
-
-  @Output() onSelect: EventEmitter<GameObject> = new EventEmitter();
-
   /** Map from flat node to nested node. This helps us finding the nested node to be modified */
   flatNodeMap = new Map<GameObjectFlatNode, GameObject>();
 
@@ -64,7 +52,11 @@ export class PanelObjectsTreeComponent implements AfterViewInit {
   dragNodeExpandOverArea?: string;
   @ViewChild('emptyItem') emptyItem?: ElementRef;
 
-  constructor(private database: ChecklistDatabase, private dialog: MatDialog) {
+  constructor(
+    private database: ChecklistDatabase,
+    private dialog: MatDialog,
+    public gameService: GameService
+  ) {
     this.treeFlattener = new MatTreeFlattener(
       this.transformer,
       this.getLevel,
@@ -86,7 +78,7 @@ export class PanelObjectsTreeComponent implements AfterViewInit {
     });
   }
   ngAfterViewInit(): void {
-    this.database.load(this.objs);
+    this.database.load(this.gameService.getScene().objs);
   }
 
   getLevel = (node: GameObjectFlatNode) => node.level;
@@ -102,7 +94,7 @@ export class PanelObjectsTreeComponent implements AfterViewInit {
 
   select(nodeFlat: GameObjectFlatNode) {
     const node = this.flatNodeMap.get(nodeFlat);
-    this.onSelect.emit(node);
+    this.gameService.select(node);
   }
 
   /**

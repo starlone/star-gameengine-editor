@@ -23,7 +23,9 @@
       <mat-tree-node
         *matTreeNodeDef="let node"
         matTreeNodePadding
-        [class.selected]="selected && selected.uid == node.uid"
+        [class.selected]="
+          gameService.selected && gameService.selected.uid == node.uid
+        "
       >
         <button
           mat-icon-button

@@ -1,5 +1,4 @@
 <app-toolbar
-  [scene]="scene"
   [engineEdit]="engineEdit"
   [isPlaying]="isPlaying"
   (onPlay)="play()"
@@ -18,13 +17,7 @@
     [opened]="(isHandset$ | async) === false"
     position="start"
   >
-    <app-panel-objects-tree
-      [objs]="scene.objs"
-      [selected]="selected"
-      (onSelect)="select($event)"
-      *ngIf="!loading"
-    >
-    </app-panel-objects-tree>
+    <app-panel-objects-tree *ngIf="!loading"> </app-panel-objects-tree>
   </mat-sidenav>
 
   <mat-sidenav
@@ -35,7 +28,7 @@
     [opened]="(isHandset$ | async) === false"
     position="end"
   >
-    <app-panel-properties [selected]="selected"></app-panel-properties>
+    <app-panel-properties></app-panel-properties>
   </mat-sidenav>
 
   <mat-sidenav-content>

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { Scene, StarEngine } from 'star-gameengine';
 import { DialogImportComponent } from '../dialogs/dialog-import/dialog-import.component';
+import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -13,7 +14,6 @@ import { DialogImportComponent } from '../dialogs/dialog-import/dialog-import.co
   styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent {
-  @Input() scene?: Scene;
   @Input() engineEdit?: StarEngine;
   @Input() isPlaying?: boolean;
 
@@ -31,11 +31,12 @@ export class ToolbarComponent {
 
   constructor(
     private dialog: MatDialog,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private gameService: GameService
   ) {}
 
   export() {
-    const json = JSON.stringify(this.scene);
+    const json = JSON.stringify(this.gameService.getScene());
     var blob = new Blob([json], { type: 'application/json;charset=utf-8' });
     saveAs(blob);
   }

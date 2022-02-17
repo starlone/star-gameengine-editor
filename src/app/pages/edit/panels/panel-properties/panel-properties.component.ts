@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { GameObject } from 'star-gameengine';
+import { Component } from '@angular/core';
+import { GameService } from '../../services/game.service';
 
 @Component({
   selector: 'app-panel-properties',
@@ -7,5 +7,5 @@ import { GameObject } from 'star-gameengine';
   styleUrls: ['./panel-properties.component.scss'],
 })
 export class PanelPropertiesComponent {
-  @Input() selected?: GameObject;
+  constructor(public gameService: GameService) {}
 }

@@ -23,6 +23,7 @@ import { DialogNewrectComponent } from './pages/edit/dialogs/dialog-newrect/dial
 import { EditComponent } from './pages/edit/edit.component';
 import { PanelObjectsTreeComponent } from './pages/edit/panels/panel-objects-tree/panel-objects-tree.component';
 import { PanelPropertiesComponent } from './pages/edit/panels/panel-properties/panel-properties.component';
+import { GameService } from './pages/edit/services/game.service';
 import { ToolbarComponent } from './pages/edit/toolbar/toolbar.component';
 
 @NgModule({
@@ -56,7 +57,7 @@ import { ToolbarComponent } from './pages/edit/toolbar/toolbar.component';
     MatCardModule,
     MatCheckboxModule,
   ],
-  providers: [],
+  providers: [GameService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

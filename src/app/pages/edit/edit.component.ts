@@ -6,15 +6,11 @@ import {
   Factory,
   GameObject,
   KeyboardHandler,
-  MeshRenderer,
-  PanInteraction,
   PlataformPlayerScript,
-  Renderer,
   Scene,
-  SelectObjectInteraction,
   StarEngine,
-  ZoomInteraction,
 } from 'star-gameengine';
+import { GameService } from './services/game.service';
 
 @Component({
   selector: 'app-edit',
@@ -31,43 +27,23 @@ export class EditComponent implements AfterViewInit {
       shareReplay()
     );
 
-  scene: Scene = new Scene();
-  selected?: GameObject;
-  oldRenderer?: Renderer;
   player?: GameObject;
   isPlaying = false;
   engineEdit: StarEngine;
   enginePlay?: StarEngine;
   loading = false;
 
-  constructor(private breakpointObserver: BreakpointObserver) {
-    this.engineEdit = new StarEngine('#canvasedit', this.scene);
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private gameService: GameService
+  ) {
+    const scene = this.gameService.getScene();
+    this.engineEdit = new StarEngine('#canvasedit', scene);
     this.inicialContent();
   }
 
   ngAfterViewInit(): void {
     this.engineEdit?.start();
-  }
-
-  select(item?: GameObject) {
-    this.deselect();
-    if (!item) return;
-    this.selected = item;
-    this.oldRenderer = item.renderer;
-    this.selected.setRenderer(
-      new MeshRenderer({
-        color: '#ffb74d',
-        strokeStyle: '#e65100',
-        lineWidth: 5,
-      })
-    );
-  }
-
-  deselect() {
-    if (this.selected && this.oldRenderer) {
-      this.selected.setRenderer(this.oldRenderer);
-    }
-    this.selected = undefined;
   }
 
   inicialContent() {
@@ -84,7 +60,9 @@ export class EditComponent implements AfterViewInit {
       color: 'green',
       rigidBody: {},
     });
-    this.scene.add(this.player);
+
+    const scene = this.gameService.getScene();
+    scene.add(this.player);
 
     const eye = Factory.rect({
       name: 'player_eye',
@@ -105,54 +83,23 @@ export class EditComponent implements AfterViewInit {
       static: true,
       rigidBody: {},
     });
-    this.scene.add(terrain);
+    scene.add(terrain);
 
     this.player.addScript(new PlataformPlayerScript({ speed: 0.4 }));
 
     const viewport = this.engineEdit.getViewport();
 
-    viewport.addInteraction(new ZoomInteraction());
-    viewport.addInteraction(
-      new SelectObjectInteraction((coordinate: any) => {
-        const obj = this.scene.getObjectByCoordinate(coordinate);
-        this.select(obj);
-      })
-    );
-    const panControl = {
-      target: this.scene.getCamera(),
-      isInverse: true,
-    };
-    const startPan = (point: any) => {
-      const obj = this.scene.getObjectByCoordinate(point);
-      if (obj && this.selected && obj === this.selected) {
-        panControl.target = obj;
-        panControl.isInverse = false;
-      } else {
-        panControl.target = this.scene.getCamera();
-        panControl.isInverse = true;
-      }
-    };
-    const endPan = () => {
-      panControl.target = this.scene.getCamera();
-      panControl.isInverse = true;
-    };
-    const movePan = (point: any) => {
-      if (panControl.isInverse) {
-        point.neg();
-      }
-      panControl.target.position.move(point.x, point.y);
-    };
-    viewport.addInteraction(new PanInteraction(startPan, endPan, movePan));
+    this.gameService.addInteractions(viewport);
   }
 
   play() {
-    this.deselect();
+    this.gameService.deselect();
     if (!this.engineEdit) return;
     if (this.isPlaying) {
       this.enginePlay?.disable();
       this.enginePlay?.stop();
     } else {
-      const newscene = this.scene.clone();
+      const newscene = this.gameService.getScene().clone();
       this.enginePlay = new StarEngine('#canvasplay', newscene);
       KeyboardHandler.add(this.enginePlay.getJoystick());
       this.enginePlay.start();
@@ -164,7 +111,7 @@ export class EditComponent implements AfterViewInit {
     this.loading = true;
     const newscene = new Scene(data);
     this.engineEdit?.setScene(newscene);
-    this.scene = newscene;
+    this.gameService.setScene(newscene);
     // Force reload panel-objects-tree.component
     setTimeout(() => {
       this.loading = false;
